@@ -1,7 +1,7 @@
 // app-header.js
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import {ListIcon, Logo, BurgerIcon, ProfileIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './AppHeader.module.css';
 
@@ -16,6 +16,11 @@ function NavItem(props) {
       </p>
     </div>
   )
+}
+
+NavItem.propTypes = {
+  color: PropTypes.string,
+  children: PropTypes.string.isRequired
 }
 
 function AppHeader() {

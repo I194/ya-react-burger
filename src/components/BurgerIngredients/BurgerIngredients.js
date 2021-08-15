@@ -1,8 +1,8 @@
 // app-header.js
 
-import React, {useRef} from 'react';
-import ReactDOM from 'react-dom';
-import {Tab, CurrencyIcon, BurgerIcon, ProfileIcon} from '@ya.praktikum/react-developer-burger-ui-components';
+import React from 'react';
+import PropTypes from 'prop-types';
+import {Tab, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerIngredients.module.css';
 import data from '../../utils/data.js';
 
@@ -12,12 +12,23 @@ function Headline(props) {
   )
 }
 
+Headline.propTypes = {
+  children: PropTypes.string.isRequired
+} 
+
 function Row(props) {
   return (
     <div className={`${styles.columnsPuns}`} style={{textAlign: 'center'}}>
       {props.children}
     </div>
   )
+}
+
+Row.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.element,
+    PropTypes.node,
+  ])
 }
 
 function Col(props) {
@@ -28,12 +39,24 @@ function Col(props) {
   )
 }
 
+Col.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.element,
+    PropTypes.node,
+  ])
+}
+
 function Illustration(props) {
   return (
     <div className={`${styles.illustration}`}>
-      <img src={props.img} />
+      <img src={props.img} alt={props.alt}/>
     </div>
   )
+}
+
+Illustration.propTypes = {
+  img: PropTypes.string,
+  alt: PropTypes.string
 }
 
 function Price(props) {
@@ -45,12 +68,23 @@ function Price(props) {
   )
 }
 
+Price.propTypes = {
+  price: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]).isRequired,
+}
+
 function Name(props) {
   return (
     <div className={`${styles.name}`}>
       <p className={'text text_type_main-default'}>{props.name}</p>
     </div>
   )
+}
+
+Name.propTypes = {
+  name: PropTypes.string.isRequired
 }
 
 function Counter(props) {
@@ -61,10 +95,18 @@ function Counter(props) {
   )
 }
 
+Counter.propTypes = {
+  visibility: PropTypes.string,
+  count: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ])
+}
+
 function Ingredient(props) {
   return (
     <>
-      <Illustration img={props.img}/>
+      <Illustration img={props.img} alt={props.name}/>
       <Price price={props.price}/>
       <Name name={props.name}/>
       <Counter count={props.count} visibility={props.visibility}/>
@@ -72,13 +114,26 @@ function Ingredient(props) {
   )
 }
 
+Ingredient.propTypes = {
+  img: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  price: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]).isRequired,
+  count: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ])
+}
+
 function BurgerIngredients() {
 
-  let buns = [], mains = [], sauces = [];
+  const buns = [], mains = [], sauces = [];
   
   data.forEach((ingredient, iter) => {
     let code = (
-      <Col>
+      <Col key={ingredient._id}>
         <Ingredient 
           name={ingredient.name}
           price={ingredient.price}

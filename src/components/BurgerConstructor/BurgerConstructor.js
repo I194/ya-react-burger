@@ -1,12 +1,11 @@
 // app-header.js
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import {ConstructorElement, CurrencyIcon, DragIcon, Button} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerConstructor.module.css';
 
 import cratorBun from '../../images/bun-02.png';
-import fluorescentBun from '../../images/bun-01.png';
 import spicyX from '../../images/sauce-02.png';
 import spaceSauce from '../../images/sauce-04.png';
 import galacticSauce from '../../images/sauce-03.png';
@@ -27,6 +26,14 @@ function Price(props) {
   )
 }
 
+Price.propTypes = {
+  size: PropTypes.string,
+  price: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]),
+}
+
 function ListElement(props) {
   let isLocked = false;
   // if (!props.visibility) props.visibility = 'visible';
@@ -37,7 +44,7 @@ function ListElement(props) {
        <DragIcon type='primary'/>
       </div>
       <ConstructorElement
-        text={props.name + (props.type === 'top' ? '(верх)' : '') + (props.type === 'bot' ? '(низ)' : '')}
+        text={props.name + (props.type === 'top' ? ' (верх)' : '') + (props.type === 'bot' ? ' (низ)' : '')}
         price={props.price}
         thumbnail={props.image}
         type={props.type}
@@ -45,6 +52,18 @@ function ListElement(props) {
       />
     </div>
   )
+}
+
+ListElement.propTypes = {
+  name: PropTypes.string,
+  type: PropTypes.string,
+  price: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]),
+  drag: PropTypes.string,
+  image: PropTypes.string,
+  isLocked: PropTypes.bool
 }
 
 function BurgerConstructor() {
@@ -91,9 +110,9 @@ function BurgerConstructor() {
           />
         </div>
         <ListElement 
-          name='Флюоресцентная булка R2-D3'
-          price='988'
-          image={fluorescentBun}
+          name='Краторная булка N-200i'
+          price='1255'
+          image={cratorBun}
           type='bot'
           drag='hidden'
         />
