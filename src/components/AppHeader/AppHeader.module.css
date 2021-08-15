@@ -1,11 +1,11 @@
 .navigationPanel {
     /* navigation panel/desktop */
 
-    position: absolute;
+    position: relative;
     height: 88px;
-    left: 2%;
-    right: 2%;
-    top: 40px;
+    /* left: 2%;
+    right: 2%; */
+    /* top: 40px; */
 
     /* interface/modal-bg */
 
@@ -21,23 +21,33 @@
 .content {
     /* content */
 
-    position: absolute;
-    width: 1280px;
+    position: relative;
+    width: 100%;
     height: 56px;
-    left: calc(50% - 1280px/2);
+    /* left: calc(50% - 1280px/2); */
+
     top: calc(50% - 56px/2);
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 
 }
 
 .navigation {
     /* navigation */
     
+    position: relative;
+    width: 80%;
     height: 56px;
+
+    padding: 0px 326px;
 
     /* Auto Layout */
 
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
     align-items: center;
     padding: 0px;
 
@@ -46,9 +56,16 @@
     background: #1C1C21;
 }
 
+.navGroup {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
 .navigationLink {
     /* Auto Layout */
 
+    /* position: absolute; */
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -65,9 +82,9 @@
 
     /* Inside Auto Layout */
 
-    flex: none;
+    /* flex: none;
     order: 1;
-    flex-grow: 0;
+    flex-grow: 0; */
     margin: 0px 4px;
 }   
 
@@ -113,22 +130,13 @@
 }
 
 .logo {
-    /* logo */
-
+    display: flex;
+    align-self: center;
     position: absolute;
-    width: 289.15px;
-    height: 40px;
-    left: 495px;
-    top: 8px;
-
-    /* interface/modal-bg */
-
-    background: #1C1C21;
-    /* interface/accent */
-
-    /* border: 1px dashed #4C4CFF; */
+    left: calc(50% - 145px);
+    right: 0%;
 }
 
 .logo svg {
-    margin-top: -5px;
+    /* margin-top: -5px; */
 }
