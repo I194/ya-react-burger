@@ -1,6 +1,6 @@
 // app-header.js
 
-import React from 'react';
+import React, {useRef} from 'react';
 import ReactDOM from 'react-dom';
 import {Tab, CurrencyIcon, BurgerIcon, ProfileIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerIngredients.module.css';
@@ -81,87 +81,48 @@ function Ingredient(props) {
 
 function BurgerIngredients() {
 
+  let buns = [], mains = [], sauces = [];
+  
+  data.forEach((ingredient, iter) => {
+    let code = (
+      <Col>
+        <Ingredient 
+          name={ingredient.name}
+          price={ingredient.price}
+          img={ingredient.image}
+          visibility={'hidden'}
+        />
+      </Col>
+    )
+    
+    if (ingredient.type === 'bun') buns.push(code);
+    if (ingredient.type === 'main') mains.push(code);
+    if (ingredient.type === 'sauce') sauces.push(code);
+  })
+
+  const [current, setCurrent] = React.useState('buns');
+
   return (
     <div className={`${styles.containerMain}`} style={{ textAlign: 'left'}}>
       <p className={'text text_type_main-large pt-10 pb-5'}>Соберите бургер</p>
       <div style={{ display: 'flex', width: '100%' }}>
-        <Tab value="buns" active={true}>
-            Булки
+        <Tab value="buns" active={current === 'buns'} onClick={setCurrent}>
+          Булки
         </Tab>
-        <Tab value="sauces" active={false}>
-            Соусы
+        <Tab value="sauces" active={current === 'sauces'} onClick={setCurrent}>
+          Соусы
         </Tab>
-        <Tab value="fillings" active={false}>
+        <Tab value="mains" active={current === 'mains'} onClick={setCurrent}>
           Начинки
         </Tab>
       </div>
       <div className={`${styles.ingredients}`}>
-        <Headline>Булки</Headline>
-        <Row>
-          <Col>
-            <Ingredient 
-              name={'Краторная булка N-200i'}
-              price={20}
-              count={1}
-              img={cratorBun}
-              absent={"Трудности с поставками метеоритов"}
-            />
-          </Col>
-          <Col>
-            <Ingredient 
-              name={'Флюоресцентная булка R2-D3'}
-              price={20}
-              count={1}
-              visibility={'hidden'}
-              img={fluorescentBun}
-              absent={"Кончился флуоресцентный пигмент :("}
-            />
-          </Col>
-        </Row>
-        <Headline>Соусы</Headline>
-        <Row>
-          <Col>
-            <Ingredient 
-              name={'Соус Spicy-X'}
-              price={30}
-              count={1}
-              visibility={'hidden'}
-              img={spicyX}
-              absent={"Трудности с поставками перца"}
-            />
-          </Col>
-          <Col>
-            <Ingredient 
-              name={'Соус фирменный Space Sauce'}
-              price={30}
-              count={1}
-              visibility={'hidden'}
-              img={spaceSauce}
-              absent={"Закончился секретный ингредиент!"}
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <Ingredient 
-              name={'Соус традиционный галактический'}
-              price={30}
-              count={1}
-              img={galacticSauce}
-              absent={"Галактическая империя временно приостановила поставки провизии"}
-            />
-          </Col>
-          <Col>
-            <Ingredient 
-              name={'Соус с шипами Антарианского плоскоходца'}
-              price={30}
-              count={1}
-              visibility={'hidden'}
-              img={spikeSauce}
-              absent={"Плоскоходцы на грани вымирания, поставки временно прекращены для восстановления популяции"}
-            />
-          </Col>
-        </Row>
+        <Headline id='buns'>Булки</Headline>
+        <Row>{buns}</Row>
+        <Headline id='sauces'>Соусы</Headline>
+        <Row>{sauces}</Row>
+        <Headline id='mains'>Начинки</Headline>
+        <Row>{mains}</Row>
       </div>
     </div>
   )
