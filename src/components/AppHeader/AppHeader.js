@@ -20,20 +20,20 @@ function NavItem(props) {
 
 function AppHeader() {
   return (
-      <header className={`${styles.navigationPanel} text text_type_main-default`}>
-        <div className={`${styles.content}`}>
-          <div className={`${styles.navigation}`}>
-            <div className={`${styles.navGroup}`}>
-              <NavItem icon={<BurgerIcon type="primary" />}>Конструктор</NavItem>
-              <NavItem icon={<ListIcon type="secondary" />} color={'text_color_inactive'}>Лента заказов</NavItem>
-            </div>
-            <div className={`${styles.logo}`}>
-              <Logo />
-            </div>
-            <NavItem icon={<ProfileIcon type="secondary" />} color={'text_color_inactive'}  left={'80vw'}>Личный кабинет</NavItem>
+    <header className={`${styles.navigationPanel} text text_type_main-default`}>
+      <div className={`${styles.content}`}>
+        <div className={`${styles.navigation}`}>
+          <div className={`${styles.navGroup}`}>
+            <NavItem icon={<BurgerIcon type="primary" />}>Конструктор</NavItem>
+            <NavItem icon={<ListIcon type="secondary" />} color={'text_color_inactive'}>Лента заказов</NavItem>
           </div>
+          <div className={`${styles.logo}`}>
+            <Logo />
+          </div>
+          <NavItem icon={<ProfileIcon type="secondary" />} color={'text_color_inactive'}  left={'80vw'}>Личный кабинет</NavItem>
         </div>
-      </header>
+      </div>
+    </header>
   )
 }
 

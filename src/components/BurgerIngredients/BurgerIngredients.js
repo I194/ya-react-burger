@@ -6,13 +6,6 @@ import {Tab, CurrencyIcon, BurgerIcon, ProfileIcon} from '@ya.praktikum/react-de
 import styles from './BurgerIngredients.module.css';
 import data from '../../utils/data.js';
 
-import cratorBun from '../../images/bun-02.png';
-import fluorescentBun from '../../images/bun-01.png';
-import spicyX from '../../images/sauce-02.png';
-import spaceSauce from '../../images/sauce-04.png';
-import galacticSauce from '../../images/sauce-03.png';
-import spikeSauce from '../../images/sauce-01.png';
-
 function Headline(props) {
   return (
     <p className={'text text_type_main-medium pt-10 pb-6'} style={{width: '100%'}}>{props.children}</p>

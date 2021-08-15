@@ -1,14 +1,10 @@
 .containerMain {
     position: relative;
     width: 600px;
-    left: calc(50vw - 600px - 20px);
+    /* left: calc(50vw - 600px - 20px); */
     /* 600px - block width,  20px - half width of burger in Logo*/
 
-    /* interface/bg */
-
     background: #131316;
-    /* interface/accent */
-
 }
 
 .columnsPuns {
@@ -78,19 +74,13 @@
 .price {
     /* price */
 
-
-    /* Auto Layout */
-
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
     padding: 0px;
-    /* width: 272px; */
 
-    padding: 4px 0px;
-        
-    
+    padding: 4px 0px;    
 }
 
 .name {
@@ -129,7 +119,7 @@
 }
 
 .ingredients {
-    max-height: calc(100vh - 56px - 100px - 88px - 8px);
+    max-height: calc(100vh - 56px - 100px - 88px - 80px);
     /* 56px - tab height, 100px - block header height (with paddings), 
        88px - main header height, 8px - for comfortable reading on frameless display  */
     overflow: auto;
