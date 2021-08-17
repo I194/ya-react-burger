@@ -66,7 +66,7 @@ ListElement.propTypes = {
   isLocked: PropTypes.bool
 }
 
-function BurgerConstructor() {
+function BurgerConstructor(props) {
 
   // здесь будет обработка данных, поступающих из BurgerIngredients
   // и генерация на их основе массива IngredientsList, состоящего из ListElement

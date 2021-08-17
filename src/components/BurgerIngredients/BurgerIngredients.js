@@ -127,7 +127,7 @@ Ingredient.propTypes = {
   ])
 }
 
-function BurgerIngredients() {
+function BurgerIngredients(props) {
 
   const buns = [], mains = [], sauces = [];
   

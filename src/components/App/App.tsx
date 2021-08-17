@@ -9,21 +9,22 @@ const API = 'https://norma.nomoreparties.space/api/ingredients ';
 function App() {
 
   const [state, setState] = useState({
-    loading: false,
-    error: false,
+    isLoading: false,
+    hasError: false,
     data: []
   })
 
   useEffect(() => {
     const getAPIdata = async () => {
-      setState({...state, loading: true, error: false});
+      setState({...state, isLoading: true, hasError: false});
       try {
         const res = await fetch(API);
         const data = await res.json();
-        setState({...state, data: data, loading: false});
+        setState({...state, data: data, isLoading: false});
       }
       catch (e) {
-        setState({...state, error: true, loading: false});
+        setState({...state, hasError: true, isLoading: false});
+        console.log(e.message);
       }
     }
 
