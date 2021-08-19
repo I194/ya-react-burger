@@ -38,6 +38,29 @@
   height: 36px;
 }
 
+.large, .large svg {
+  
+  overflow: auto;
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+
+  width: 48px;
+  height: 48px;
+}
+
+.pentaSmall {
+  background: radial-gradient(50% 50% at 50% 50%, rgba(128, 26, 179, 0) 0%, rgba(76, 76, 255, 0.125) 100%);
+}
+
+.pentaMedium {
+  background: radial-gradient(50% 50% at 50% 50%, rgba(128, 26, 179, 0) 0%, rgba(76, 76, 255, 0.25) 100%);
+}
+
+.pentaLarge {
+  background: radial-gradient(50% 50% at 50% 50%, rgba(128, 26, 179, 0) 0%, rgba(76, 76, 255, 0.25) 100%);
+}
+
 .element {
   display: flex;
   flex-direction: row;
@@ -66,4 +89,36 @@
 
   border: 3px solid #8585AD;
   box-sizing: border-box;
+}
+
+.orderId {
+  text-shadow: 0px 0px 16px rgba(51, 51, 255, 0.25), 0px 0px 8px rgba(51, 51, 255, 0.25), 0px 4px 32px rgba(51, 51, 255, 0.5);
+}
+
+.orderDetail {
+  align-items: center;
+}
+
+.orderDone {
+
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
+  justify-content: center;
+  text-align: center;
+
+  padding: 60px 0px;
+
+}
+
+.doneImage {
+  position: absolute;
+  width: 140px;
+  height: 120px;
+  left: 281.5px;
+  top: 360.51px;
+
+  background-image: url('../../images/orderDone.png');
+  background-size: cover;
 }

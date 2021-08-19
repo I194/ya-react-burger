@@ -20,7 +20,7 @@ function App() {
       try {
         const res = await fetch(API);
         const data = await res.json();
-        setState({...state, data: data, isLoading: false});
+        setState({...state, data: data.data, isLoading: false});
       }
       catch (e) {
         setState({...state, hasError: true, isLoading: false});
@@ -32,13 +32,17 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <AppHeader />
-      <div className={`${styles.containerMain}`}>
-        <BurgerIngredients data={state.data}/>
-        <BurgerConstructor data={state.data}/>
+    <>
+      <div className="App">
+        <AppHeader />
+        { !state.isLoading && !state.hasError &&
+        <div className={`${styles.containerMain}`}>
+          <BurgerIngredients data={state.data}/>
+          <BurgerConstructor />
+        </div>
+        }
       </div>
-    </div>
+    </>
   );
 }
 

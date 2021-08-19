@@ -32,7 +32,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 0px;
+    padding-bottom: 32px;
 
     /* Inside Auto Layout */
 
@@ -52,8 +52,8 @@
     /* illustration */
 
     position: static;
-    width: 240px;
-    height: 120px;
+    /* width: 240px;
+    height: 120px; */
     left: 16px;
     top: 0px;
 
@@ -87,15 +87,8 @@
     /* name */
 
     position: static;
-    height: 48px;
+    /* height: 48px; */
     /* width: 272px; */
-
-    /* interface/bg */
-
-    background: #131316;
-    /* interface/accent */
-
-    
 
     /* Inside Auto Layout */
 
@@ -137,4 +130,18 @@
 
     border: 3px solid #8585AD;
     box-sizing: border-box;
+}
+
+.nutritionDetails {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-around;
+}
+
+.nutritionElement {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
 }
