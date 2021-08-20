@@ -1,10 +1,9 @@
-// app-header.js
-
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {CloseIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './Modal.module.css';
 import { createPortal } from 'react-dom';
+import ModalOverlay from './ModalOverlay';
 
 function ModalHeader (props) {
   return (
@@ -39,17 +38,7 @@ ModalBody.propTypes = {
   ]).isRequired
 }
 
-function ModalOverlay (props) {
-  return (
-    <div className={`${styles.modalOverlay}`} onClick={props.onClick}></div>
-  )
-}
-
-ModalOverlay.propTypes = {
-  onClick: PropTypes.func.isRequired,
-}
-
-function Modal(props) {
+export default function Modal(props) {
 
   const handleKeyPress = (event) => {
     if (event.code === 'Escape'){
@@ -105,5 +94,3 @@ Modal.propTypes = {
     PropTypes.node,
   ]).isRequired
 }
-
-export default Modal;

@@ -3,46 +3,35 @@ import AppHeader from '../AppHeader/AppHeader';
 import BurgerIngredients from '../BurgerIngredients/BurgerIngredients';
 import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
 import styles from './App.module.css';
+import getData from '../../utils/burger-api';
 
-const API = 'https://norma.nomoreparties.space/api/ingredients ';
+const BURGER_API_URL = 'https://norma.nomoreparties.space/api';
 
 function App() {
 
-  const [state, setState] = useState({
-    isLoading: false,
-    hasError: false,
-    data: []
-  })
+  const [data, setData] = useState([]);
 
   useEffect(() => {
-    const getAPIdata = async () => {
-      setState({...state, isLoading: true, hasError: false});
-      try {
-        const res = await fetch(API);
-        const data = await res.json();
-        setState({...state, data: data.data, isLoading: false});
-      }
-      catch (e) {
-        setState({...state, hasError: true, isLoading: false});
-        console.log(e.message);
-      }
-    }
 
-    getAPIdata();
+    const setAPIdata = async () => {
+      const apiData : any = await getData(`${BURGER_API_URL}/ingredients`);
+      setData(apiData);
+    };
+
+    setAPIdata();
+
   }, []);
 
   return (
-    <>
-      <div className="App">
-        <AppHeader />
-        { !state.isLoading && !state.hasError &&
-        <div className={`${styles.containerMain}`}>
-          <BurgerIngredients data={state.data}/>
-          <BurgerConstructor />
-        </div>
-        }
+    <div className="App">
+      <AppHeader />
+      { data.length > 0 &&
+      <div className={`${styles.containerMain}`}>
+        <BurgerIngredients data={data}/>
+        <BurgerConstructor />
       </div>
-    </>
+      }
+    </div>
   );
 }
 

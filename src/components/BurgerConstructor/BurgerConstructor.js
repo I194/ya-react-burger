@@ -1,10 +1,9 @@
-// app-header.js
-
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import {ConstructorElement, CurrencyIcon, DragIcon, CheckMarkIcon, Button} from '@ya.praktikum/react-developer-burger-ui-components';
+import {ConstructorElement, CurrencyIcon, DragIcon, Button} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerConstructor.module.css';
 import Modal from '../Modal/Modal';
+import OrderDetails from './OrderDetails';
 
 import cratorBun from '../../images/bun-02.png';
 import spicyX from '../../images/sauce-02.png';
@@ -28,32 +27,8 @@ function Price(props) {
 }
 
 Price.propTypes = {
-  size: PropTypes.string,
+  size: PropTypes.string.isRequired,
   price: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number
-  ]),
-}
-
-function OrderDetails(props) {
-  return (
-    <div className={`${styles.oderDetail}`}>
-      <p className={`${styles.orderId} text text_type_digits-large pb-8 pt-4`}>{props.id}</p>
-      <p className={`text text_type_main-medium`}>идентификатор заказа</p>
-      <div className={`${styles.doneImage}`}></div>
-      <div className={`${styles.orderDone}`}>
-        <div className={`${styles.large} pt`}>
-          <CheckMarkIcon type="primary" />
-        </div>
-      </div>
-      <p className={`text text_type_main-default pb-2`}>Ваш заказ начали готовить</p>
-      <p className={`text text_type_main-default text_color_inactive`}>Дождитесь готовности на орбитальной станции</p>
-    </div>
-  )
-}
-
-OrderDetails.propTypes = {
-  id: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number
   ]).isRequired,
@@ -80,18 +55,17 @@ function ListElement(props) {
 }
 
 ListElement.propTypes = {
-  name: PropTypes.string,
+  name: PropTypes.string.isRequired,
   type: PropTypes.string,
   price: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number
-  ]),
+  ]).isRequired,
   drag: PropTypes.string,
-  image: PropTypes.string,
-  isLocked: PropTypes.bool
+  image: PropTypes.string.isRequired,
 }
 
-function BurgerConstructor() {
+export default function BurgerConstructor() {
 
   const [modalVisible, setVisibility] = useState(false);
   
@@ -171,5 +145,3 @@ function BurgerConstructor() {
     </div>
   )
 }
-
-export default BurgerConstructor;
