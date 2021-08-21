@@ -138,10 +138,12 @@ export default function BurgerConstructor() {
           </Button>
         </div>
       </div>
-      
-      <Modal header={''} isVisible={modalVisible} onClose={handleCloseModal} box={{w: '720px', h: '720px'}}>
-        <OrderDetails {...modalData}/>
-      </Modal>
+      {
+        modalVisible &&
+        <Modal header={''} isVisible={modalVisible} onClose={handleCloseModal} box={{w: '720px', h: '720px'}}>
+          <OrderDetails {...modalData}/>
+        </Modal>
+      }
     </div>
   )
 }

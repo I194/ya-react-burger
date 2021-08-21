@@ -112,9 +112,13 @@ export default function BurgerIngredients(props) {
         <Headline id='mains'>Начинки</Headline>
         <Row>{mains.map(dataToIngredient)}</Row>
       </div>
-      <Modal header={'Детали ингредиента'} isVisible={modalVisible} onClose={handleCloseModal} box={{w: '720px', h: '540px'}}>
-        {modalVisible && <IngredientDetails {...modalData}/>}
-      </Modal>
+      {
+        modalVisible &&
+        <Modal header={'Детали ингредиента'} isVisible={modalVisible} onClose={handleCloseModal} box={{w: '720px', h: '540px'}}>
+          <IngredientDetails {...modalData}/>
+        </Modal>
+      }
+      
     </div>
   )
 }
