@@ -3,9 +3,7 @@ import AppHeader from '../AppHeader/AppHeader';
 import BurgerIngredients from '../BurgerIngredients/BurgerIngredients';
 import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
 import styles from './App.module.css';
-import getData from '../../utils/burger-api';
-
-const BURGER_API_URL = 'https://norma.nomoreparties.space/api';
+import getIngredients from '../../utils/burger-api';
 
 function App() {
 
@@ -13,12 +11,12 @@ function App() {
 
   useEffect(() => {
 
-    const setAPIdata = async () => {
-      const apiData : any = await getData(`${BURGER_API_URL}/ingredients`);
-      setData(apiData);
+    const loadIngredients = async () => {
+      const ingredients : any = await getIngredients();
+      setData(ingredients);
     };
 
-    setAPIdata();
+    loadIngredients();
 
   }, []);
 
