@@ -7,7 +7,7 @@ import styles from './AppHeader.module.css';
 
 function NavItem(props) {
   return (
-    <div className={`${styles.navigationLink} ${props.color}`}>
+    <div className={`${styles.navigationLink} ${props.color || ''}`}>
       <div className={`${styles.icon24}`}>
         {props.icon}
       </div> 

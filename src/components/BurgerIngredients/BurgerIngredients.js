@@ -1,19 +1,22 @@
 // app-header.js
 
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import {Tab, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
+import {Tab} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerIngredients.module.css';
-import data from '../../utils/data.js';
+import Modal from '../Modal/Modal';
+import Ingredient from './Ingredient';
+import IngredientDetails from './IngredientDetails';
 
 function Headline(props) {
   return (
-    <p className={'text text_type_main-medium pt-10 pb-6'} style={{width: '100%'}}>{props.children}</p>
+    <p className={'text text_type_main-medium pt-10 pb-6'} style={{width: '100%'}} id={props.id}>{props.children}</p>
   )
 }
 
 Headline.propTypes = {
-  children: PropTypes.string.isRequired
+  children: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired
 } 
 
 function Row(props) {
@@ -33,7 +36,7 @@ Row.propTypes = {
 
 function Col(props) {
   return (
-    <div className={`${styles.col}`}>
+    <div className={`${styles.col}`} onClick={props.onClick}>
       {props.children}
     </div>
   )
@@ -46,134 +49,80 @@ Col.propTypes = {
   ])
 }
 
-function Illustration(props) {
-  return (
-    <div className={`${styles.illustration}`}>
-      <img src={props.img} alt={props.alt}/>
-    </div>
-  )
-}
+export default function BurgerIngredients(props) {
 
-Illustration.propTypes = {
-  img: PropTypes.string,
-  alt: PropTypes.string
-}
-
-function Price(props) {
-  return (
-    <div className={`${styles.price}`}>
-      <p className="text text_type_digits-default mr-2">{props.price}</p>
-      <CurrencyIcon type="primary"/>
-    </div>
-  )
-}
-
-Price.propTypes = {
-  price: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number
-  ]).isRequired,
-}
-
-function Name(props) {
-  return (
-    <div className={`${styles.name}`}>
-      <p className={'text text_type_main-default'}>{props.name}</p>
-    </div>
-  )
-}
-
-Name.propTypes = {
-  name: PropTypes.string.isRequired
-}
-
-function Counter(props) {
-  return (
-    <div className={`${styles.counter}`} style={{visibility: `${props.visibility || 'visible'}`}}>
-      <p className="text text_type_digits-default pt-1">{props.count}</p>
-    </div>
-  )
-}
-
-Counter.propTypes = {
-  visibility: PropTypes.string,
-  count: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number
-  ])
-}
-
-function Ingredient(props) {
-  return (
-    <>
-      <Illustration img={props.img} alt={props.name}/>
-      <Price price={props.price}/>
-      <Name name={props.name}/>
-      <Counter count={props.count} visibility={props.visibility}/>
-    </>
-  )
-}
-
-Ingredient.propTypes = {
-  img: PropTypes.string,
-  name: PropTypes.string.isRequired,
-  price: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number
-  ]).isRequired,
-  count: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number
-  ])
-}
-
-function BurgerIngredients() {
-
-  const buns = [], mains = [], sauces = [];
+  const [modalVisible, setVisibility] = useState(false);
+  const [modalData, setModalData] = useState();
   
-  data.forEach((ingredient, iter) => {
-    let code = (
-      <Col key={ingredient._id}>
+  const handleCloseModal = () => {
+    setVisibility(false);
+  }
+
+  const handleOpenModal = (data) => {
+    setVisibility(true);
+    setModalData(data);
+  }
+
+  const buns = useMemo(() => props.data.filter((item) => item.type === 'bun'), [props.data]);
+  const mains = useMemo(() => props.data.filter((item) => item.type === 'main'), [props.data]);
+  const sauces = useMemo(() => props.data.filter((item) => item.type === 'sauce'), [props.data]);
+
+  const dataToIngredient = (data) => {
+    return (
+      <Col key={data._id} onClick={() => {handleOpenModal(data)}}>
         <Ingredient 
-          name={ingredient.name}
-          price={ingredient.price}
-          img={ingredient.image}
+          name={data.name} 
+          price={data.price}
+          img={data.image}
           visibility={'hidden'}
         />
       </Col>
     )
-    
-    if (ingredient.type === 'bun') buns.push(code);
-    if (ingredient.type === 'main') mains.push(code);
-    if (ingredient.type === 'sauce') sauces.push(code);
-  })
+  }
 
-  const [current, setCurrent] = React.useState('buns');
+  const [current, setCurrent] = useState('buns');
+
+  const setTab = (tab) => {
+    console.log(tab)
+    setCurrent(tab);
+    const element = document.getElementById(tab);
+    console.log(element)
+    if (element) element.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
-    <div className={`${styles.containerMain}`} style={{ textAlign: 'left'}}>
+    <div className={`${styles.containerMain}`} style={{ textAlign: 'left'}} >
       <p className={'text text_type_main-large pt-10 pb-5'}>Соберите бургер</p>
       <div style={{ display: 'flex', width: '100%' }}>
-        <Tab value="buns" active={current === 'buns'} onClick={setCurrent}>
+        <Tab value="buns" active={current === 'buns'} onClick={setTab}>
           Булки
         </Tab>
-        <Tab value="sauces" active={current === 'sauces'} onClick={setCurrent}>
+        <Tab value="sauces" active={current === 'sauces'} onClick={setTab}>
           Соусы
         </Tab>
-        <Tab value="mains" active={current === 'mains'} onClick={setCurrent}>
+        <Tab value="mains" active={current === 'mains'} onClick={setTab}>
           Начинки
         </Tab>
       </div>
       <div className={`${styles.ingredients}`}>
         <Headline id='buns'>Булки</Headline>
-        <Row>{buns}</Row>
+        <Row>{buns.map(dataToIngredient)}</Row>
         <Headline id='sauces'>Соусы</Headline>
-        <Row>{sauces}</Row>
+        <Row>{sauces.map(dataToIngredient)}</Row>
         <Headline id='mains'>Начинки</Headline>
-        <Row>{mains}</Row>
+        <Row>{mains.map(dataToIngredient)}</Row>
       </div>
+      {
+        modalVisible &&
+        <Modal header={'Детали ингредиента'} isVisible={modalVisible} onClose={handleCloseModal} box={{w: '720px', h: '540px'}}>
+          <IngredientDetails {...modalData}/>
+        </Modal>
+      }
+      
     </div>
   )
 }
 
-export default BurgerIngredients;
+BurgerIngredients.propTypes = {
+  data: PropTypes.array.isRequired
+}

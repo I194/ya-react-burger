@@ -1,9 +1,9 @@
-// app-header.js
-
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {ConstructorElement, CurrencyIcon, DragIcon, Button} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerConstructor.module.css';
+import Modal from '../Modal/Modal';
+import OrderDetails from './OrderDetails';
 
 import cratorBun from '../../images/bun-02.png';
 import spicyX from '../../images/sauce-02.png';
@@ -27,11 +27,11 @@ function Price(props) {
 }
 
 Price.propTypes = {
-  size: PropTypes.string,
+  size: PropTypes.string.isRequired,
   price: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number
-  ]),
+  ]).isRequired,
 }
 
 function ListElement(props) {
@@ -55,18 +55,31 @@ function ListElement(props) {
 }
 
 ListElement.propTypes = {
-  name: PropTypes.string,
+  name: PropTypes.string.isRequired,
   type: PropTypes.string,
   price: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number
-  ]),
+  ]).isRequired,
   drag: PropTypes.string,
-  image: PropTypes.string,
-  isLocked: PropTypes.bool
+  image: PropTypes.string.isRequired,
 }
 
-function BurgerConstructor() {
+export default function BurgerConstructor() {
+
+  const [modalVisible, setVisibility] = useState(false);
+  
+  const handleCloseModal = () => {
+    setVisibility(false);
+  }
+
+  const handleOpenModal = () => {
+    setVisibility(true);
+  }
+
+  const modalData = {
+    id: '034536'
+  }
 
   // здесь будет обработка данных, поступающих из BurgerIngredients
   // и генерация на их основе массива IngredientsList, состоящего из ListElement
@@ -120,13 +133,17 @@ function BurgerConstructor() {
       <div className={`${styles.totalInfo}`}>
         <Price price={500} size='medium'/>
         <div className="pl-10">
-          <Button type="primary" size="large">
+          <Button type="primary" size="large" onClick={handleOpenModal}>
             Оформить заказ
           </Button>
         </div>
       </div>
+      {
+        modalVisible &&
+        <Modal header={''} isVisible={modalVisible} onClose={handleCloseModal} box={{w: '720px', h: '720px'}}>
+          <OrderDetails {...modalData}/>
+        </Modal>
+      }
     </div>
   )
 }
-
-export default BurgerConstructor;
