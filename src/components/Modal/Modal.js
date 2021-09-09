@@ -50,8 +50,6 @@ export default function Modal(props) {
     if (props.isVisible) document.getElementById('modal-container').focus();
   }, [props.isVisible])
 
-  console.log(props.box)
-
   return createPortal(
     ( 
       <> 
