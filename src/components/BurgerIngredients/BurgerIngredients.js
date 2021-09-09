@@ -146,7 +146,7 @@ export default function BurgerIngredients() {
       </div>
       {
         modalVisible &&
-        <Modal header={'Детали ингредиента'} isVisible={modalVisible} onClose={handleCloseModal} box={{w: '72y0px', h: '540px'}}>
+        <Modal header={'Детали ингредиента'} isVisible={modalVisible} onClose={handleCloseModal} box={{w: '720px', h: '540px'}}>
           <IngredientDetails />
         </Modal>
       }
