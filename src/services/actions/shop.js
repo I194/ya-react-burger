@@ -34,11 +34,6 @@ export function getItems() {
           type: GET_INGREDIENTS_SUCCESS,
           ingredients: res.data
         })
-        dispatch({
-          type: SET_INGREDIENT_COUNT,
-          id: "60d3b41abdacab0026a733c6",
-          count: 2,
-        })
       } else {
         dispatch({
           type: GET_INGREDIENTS_FAILED
@@ -59,6 +54,15 @@ export function getOrder(ingredientsId) {
           type: GET_ORDER_SUCCESS,
           order: res
         })
+        dispatch({
+          type: SET_SELECTED_INGREDIENTS,
+          ingredients: []
+        })
+        dispatch({
+          type: CHANGE_SELECTED_BUN,
+          bunId: null
+        })
+        dispatch(getItems())
       } else {
         dispatch({
           type: GET_ORDER_FAILED

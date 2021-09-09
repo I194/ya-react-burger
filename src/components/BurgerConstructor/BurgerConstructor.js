@@ -41,19 +41,14 @@ Price.propTypes = {
   ]).isRequired,
 }
 
-function ListElement(props) {
+const ListElement = (props) => {
 
   const dispatch = useDispatch();
 
   const ref = useRef(null);
 
-  const [{ handlerId }, drop] = useDrop({
+  const [, drop] = useDrop({
     accept: 'selectedIngredient',
-    collect(monitor) {
-      return {
-        handlerId: monitor.getHandlerId(),
-      };
-    },
     hover(item, monitor) {
       if (!ref.current) {
         return;
@@ -93,22 +88,23 @@ function ListElement(props) {
     },
   })
 
-  const [{isDragging}, drag] = useDrag({
+  const [{handlerId, isDragging}, drag] = useDrag({
     type: 'selectedIngredient',
     item: () => {
       return { id: props.uid, index: props.index };
     },
     collect: (monitor) => ({
+      handlerId: monitor.getHandlerId(),
       isDragging: monitor.isDragging(),
     })
   })
-  
+
   const opacity = isDragging ? 0 : 1;
 
   let isLocked = false;
   
   if (props.type === 'top' || props.type === 'bottom') isLocked = true;
-  else drag(drop(ref));
+  else drop(ref); drag(ref); 
 
   return (
     <div className={`${styles.element}`} style={{ opacity }} ref={ref} data-handler-id={handlerId}>
@@ -131,7 +127,6 @@ function ListElement(props) {
             uid: props.uid
           })
         }}
-        
       />
     </div>
   )
@@ -191,7 +186,7 @@ export default function BurgerConstructor(props) {
         image={ingredient.image}
         id={ingredient._id}
         uid={ingredientId.uid}
-        key={index}
+        key={ingredientId.uid}
         type={position}
         index={index}
         moveIngredientHandler={moveIngredientHandler}
@@ -202,6 +197,7 @@ export default function BurgerConstructor(props) {
   // Total price
 
   const getPrices = (ingredientId) => {
+    if (!ingredientId.id) return 0;
     const ingredient = ingredients.filter(ingr => ingr._id === ingredientId.id)[0];
 
     return ingredient.price;
@@ -254,8 +250,8 @@ export default function BurgerConstructor(props) {
     const draggableItem = selectedIngredients[dragIndex];
     const newSelectedIngredients = update(selectedIngredients, {
       $splice: [
-          [dragIndex, 1],
-          [hoverIndex, 0, draggableItem],
+        [dragIndex, 1],
+        [hoverIndex, 0, draggableItem],
       ],
     })
 
@@ -269,21 +265,35 @@ export default function BurgerConstructor(props) {
 
   return (
     <div className={`${styles.containerMain}`}>
-      <div className={'pt-25 pb-10'} style={{ display: 'flex', flexDirection: 'column', gap: '10px', border: borderColor}} ref={dropTarget}>
-        {[selectedBun].map((bun) => dataToIngredient(bun, -1, 'top'))}
-        <div className={`${styles.optionalIngredients}`} style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
-          {selectedIngredients.map((ingredient, index) => dataToIngredient(ingredient, index))}
-        </div>
-        {[selectedBun].map((bun) => dataToIngredient(bun, -1, 'bottom'))}
-      </div>
-      <div className={`${styles.totalInfo}`}>
-        <Price price={[...selectedIngredients, selectedBun, selectedBun].map(getPrices).reduce(getTotalPrice)} size='medium'/>
-        <div className="pl-10">
-          <Button type="primary" size="large" onClick={handleOpenModal}>
-            Оформить заказ
-          </Button>
-        </div>
-      </div>
+      {
+        (selectedIngredients.length || selectedBun.id) 
+        ?
+        <>
+          <div className={'pt-25 pb-10'} style={{ display: 'flex', flexDirection: 'column', gap: '10px', border: borderColor}} ref={dropTarget}>
+            {selectedBun.id && [selectedBun].map((bun) => dataToIngredient(bun, -1, 'top'))}
+            <div className={`${styles.optionalIngredients}`} style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
+              {selectedIngredients.map((ingredient, index) => dataToIngredient(ingredient, index))}
+            </div>
+            {selectedBun.id && [selectedBun].map((bun) => dataToIngredient(bun, -1, 'bottom'))}
+          </div>
+          <div className={`${styles.totalInfo}`}>
+            <Price price={[...selectedIngredients, selectedBun, selectedBun].map(getPrices).reduce(getTotalPrice)} size='medium'/>
+            <div className="pl-10">
+              <Button type="primary" size="large" onClick={handleOpenModal}>
+                Оформить заказ
+              </Button>
+            </div>
+          </div>
+        </>
+        :
+        <>
+          <div className={'mt-25 pt-30 pb-30'} style={{ display: 'flex', flexDirection: 'column', gap: '10px', border: borderColor}} ref={dropTarget}>
+            <p className={`text text_type_main-medium pb-2 pl-10 pr-10 pt-2`} style={{textAlign: 'center'}}>
+              Перенесите в эту область булку и другие ингредиенты для бургера 
+            </p>
+          </div>
+        </>
+      }
       {
         modalVisible &&
         <Modal header={''} isVisible={modalVisible} onClose={handleCloseModal} box={{w: '720px', h: '720px'}}>

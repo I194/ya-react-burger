@@ -31,7 +31,7 @@ const initialState = {
   ingredientsRequest: false,
   ingredientsFailed: false,
 
-  selectedBun: {id: "60d3b41abdacab0026a733c6", uid: 0},
+  selectedBun: {id: null, uid: 0},//{id: "60d3b41abdacab0026a733c6", uid: 0},
   selectedIngredients: [],
   selectedIngredientsRequest: false,
   selectedIngredientsFailed: false,

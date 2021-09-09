@@ -9,6 +9,7 @@ export async function getIngredients() {
   return fetch(`${BURGER_API_URL}/ingredients`)
     .then(res => checkReponse(res))
     .then(data => data)
+    .catch(e => console.log(e))
 
 }
 
@@ -24,5 +25,6 @@ export async function postOrder(ingredientsId) {
     })
     .then(res => checkReponse(res))
     .then(data => data)
+    .catch(e => console.log(e))
 
 }

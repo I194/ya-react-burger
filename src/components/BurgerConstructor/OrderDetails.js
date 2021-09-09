@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { CheckMarkIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerConstructor.module.css';
-import { getOrder } from '../../services/actions/shop';
+import { getOrder, SET_SELECTED_INGREDIENTS, CHANGE_SELECTED_BUN } from '../../services/actions/shop';
 
 export default function OrderDetails(props) {
 
