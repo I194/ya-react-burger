@@ -4,10 +4,25 @@ const checkReponse = (res) => {
   return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
 };
 
-export default async function getIngredients() {
+export async function getIngredients() {
 
   return fetch(`${BURGER_API_URL}/ingredients`)
     .then(res => checkReponse(res))
-    .then(data => data.data)
+    .then(data => data)
+
+}
+
+export async function postOrder(ingredientsId) {
+
+  return fetch(`${BURGER_API_URL}/orders`, {
+      method: "POST", 
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ingredients: ingredientsId})
+    })
+    .then(res => checkReponse(res))
+    .then(data => data)
 
 }

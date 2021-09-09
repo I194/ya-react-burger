@@ -1,16 +1,23 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import update from 'immutability-helper';
+import { useDispatch, useSelector } from 'react-redux';
+import { useDrag, useDrop } from "react-dnd";
 import PropTypes from 'prop-types';
 import {ConstructorElement, CurrencyIcon, DragIcon, Button} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerConstructor.module.css';
 import Modal from '../Modal/Modal';
 import OrderDetails from './OrderDetails';
-
-import cratorBun from '../../images/bun-02.png';
-import spicyX from '../../images/sauce-02.png';
-import spaceSauce from '../../images/sauce-04.png';
-import galacticSauce from '../../images/sauce-03.png';
-import meat from '../../images/meat-03.png';
-import cheese from '../../images/cheese.png';
+import { 
+  getItems, 
+  getOrder,
+  ADD_SELECTED_INGREDIENT, 
+  DELETE_SELECTED_INGREDIENT, 
+  INCREASE_INGREDIENT_COUNT, 
+  DECREASE_INGREDIENT_COUNT,
+  SET_INGREDIENT_COUNT,
+  CHANGE_SELECTED_BUN,
+  SET_SELECTED_INGREDIENTS,
+} from '../../services/actions/shop.js';
 
 function Price(props) {
   if (!props.size) props.size = 'default';
@@ -35,20 +42,96 @@ Price.propTypes = {
 }
 
 function ListElement(props) {
+
+  const dispatch = useDispatch();
+
+  const ref = useRef(null);
+
+  const [{ handlerId }, drop] = useDrop({
+    accept: 'selectedIngredient',
+    collect(monitor) {
+      return {
+        handlerId: monitor.getHandlerId(),
+      };
+    },
+    hover(item, monitor) {
+      if (!ref.current) {
+        return;
+      }
+      const dragIndex = item.index;
+      const hoverIndex = props.index;
+      // Don't replace items with themselves
+      if (dragIndex === hoverIndex) {
+        return;
+      }
+      // Determine rectangle on screen
+      const hoverBoundingRect = ref.current?.getBoundingClientRect();
+      // Get vertical middle
+      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      // Determine mouse position
+      const clientOffset = monitor.getClientOffset();
+      // Get pixels to the top
+      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+      // Only perform the move when the mouse has crossed half of the items height
+      // When dragging downwards, only move when the cursor is below 50%
+      // When dragging upwards, only move when the cursor is above 50%
+      // Dragging downwards
+      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+        return;
+      }
+      // Dragging upwards
+      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+        return;
+      }
+      // Time to actually perform the action
+      props.moveIngredientHandler(dragIndex, hoverIndex);
+      // Note: we're mutating the monitor item here!
+      // Generally it's better to avoid mutations,
+      // but it's good here for the sake of performance
+      // to avoid expensive index searches.
+      item.index = hoverIndex;
+    },
+  })
+
+  const [{isDragging}, drag] = useDrag({
+    type: 'selectedIngredient',
+    item: () => {
+      return { id: props.uid, index: props.index };
+    },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    })
+  })
+  
+  const opacity = isDragging ? 0 : 1;
+
   let isLocked = false;
-  // if (!props.visibility) props.visibility = 'visible';
-  if (props.type === 'top' || props.type === 'bot') isLocked = true;
+  
+  if (props.type === 'top' || props.type === 'bottom') isLocked = true;
+  else drag(drop(ref));
+
   return (
-    <div className={`${styles.element}`}>
-      <div className='' style={{visibility: `${props.drag || 'visible'}`}}>
+    <div className={`${styles.element}`} style={{ opacity }} ref={ref} data-handler-id={handlerId}>
+      <div className='' style={{visibility: `${isLocked ? 'hidden' : 'visible'}`}}>
        <DragIcon type='primary'/>
       </div>
       <ConstructorElement
-        text={props.name + (props.type === 'top' ? ' (верх)' : '') + (props.type === 'bot' ? ' (низ)' : '')}
+        text={props.name + (props.type === 'top' ? ' (верх)' : '') + (props.type === 'bottom' ? ' (низ)' : '')}
         price={props.price}
         thumbnail={props.image}
         type={props.type}
         isLocked={isLocked}
+        handleClose={() => {
+          dispatch({
+            type: DECREASE_INGREDIENT_COUNT,
+            id: props.id
+          })
+          dispatch({
+            type: DELETE_SELECTED_INGREDIENT,
+            uid: props.uid
+          })
+        }}
+        
       />
     </div>
   )
@@ -65,73 +148,136 @@ ListElement.propTypes = {
   image: PropTypes.string.isRequired,
 }
 
-export default function BurgerConstructor() {
+export default function BurgerConstructor(props) {
 
-  const [modalVisible, setVisibility] = useState(false);
+  const dispatch = useDispatch();
+
+  // Order details (Modal)
   
+  const [modalVisible, setVisibility] = useState(false);
+
+  const getIngredientsId = (ingredient) => {
+    return ingredient.id;
+  }
+
   const handleCloseModal = () => {
     setVisibility(false);
   }
 
   const handleOpenModal = () => {
+    dispatch(getOrder([...selectedIngredients, selectedBun, selectedBun].map(getIngredientsId)));
     setVisibility(true);
   }
 
-  const modalData = {
-    id: '034536'
+  // Ingredients 
+  
+  const ingredients = useSelector(state => state.shop.ingredients);
+  const selectedBun = useSelector(state => state.shop.selectedBun);
+  const selectedIngredients = useSelector(state => state.shop.selectedIngredients);
+
+  useEffect(() => {
+      if (!ingredients.length) dispatch(getItems());
+    },
+    [dispatch, ingredients]
+  ); 
+
+  const dataToIngredient = (ingredientId, index, position) => {
+    const ingredient = ingredients.filter(ingr => ingr._id === ingredientId.id)[0];
+
+    return (
+      <ListElement 
+        name={ingredient.name}
+        price={ingredient.price}
+        image={ingredient.image}
+        id={ingredient._id}
+        uid={ingredientId.uid}
+        key={index}
+        type={position}
+        index={index}
+        moveIngredientHandler={moveIngredientHandler}
+      />
+    )
   }
 
-  // здесь будет обработка данных, поступающих из BurgerIngredients
-  // и генерация на их основе массива IngredientsList, состоящего из ListElement
-  // но пока логика проброса данных не реализована, и потому тут хардкод 
+  // Total price
+
+  const getPrices = (ingredientId) => {
+    const ingredient = ingredients.filter(ingr => ingr._id === ingredientId.id)[0];
+
+    return ingredient.price;
+  }
+
+  const getTotalPrice = (acc, val) => acc + val;
+
+  // onDrop (get ingredients from BurgerIngredients)
+
+  const [{isHover}, dropTarget] = useDrop({
+    accept: "ingredient",
+    drop(ingredient) {
+      const ingredientFull = ingredients.filter(ingr => ingr._id === ingredient.id)[0];
+      if (ingredientFull.type === 'bun') {
+        dispatch({
+          type: SET_INGREDIENT_COUNT,
+          id: selectedBun.id,
+          count: 0,
+        })
+        dispatch({
+          type: CHANGE_SELECTED_BUN,
+          bunId: ingredient.id
+        })
+        dispatch({
+          type: SET_INGREDIENT_COUNT,
+          id: ingredient.id,
+          count: 2,
+        })
+      } else {
+        dispatch({
+          type: ADD_SELECTED_INGREDIENT,
+          ingredient: {...ingredient, uid: Number(new Date())}
+        });
+        dispatch({
+          type: INCREASE_INGREDIENT_COUNT,
+          id: ingredient.id
+        })
+      }
+    },
+    collect: monitor => ({
+      isHover: monitor.isOver(),
+    })
+  });
+
+  const borderColor = isHover ? '4px double lightgreen' : '2px double transparent';
+
+  // onDrag (sortable within itself)
+
+  const moveIngredientHandler = useCallback((dragIndex, hoverIndex) => {
+    const draggableItem = selectedIngredients[dragIndex];
+    const newSelectedIngredients = update(selectedIngredients, {
+      $splice: [
+          [dragIndex, 1],
+          [hoverIndex, 0, draggableItem],
+      ],
+    })
+
+    dispatch({
+      type: SET_SELECTED_INGREDIENTS,
+      ingredients: newSelectedIngredients
+    })
+  }, [selectedIngredients, dispatch]);
+
+  if (!ingredients.length || ingredients.length === 0) return null;
 
   return (
     <div className={`${styles.containerMain}`}>
-      <div className={'pt-25 pb-10'} style={{ display: 'flex', flexDirection: 'column', gap: '10px'}}>
-        <ListElement 
-          name='Краторная булка N-200i'
-          price='1255'
-          image={cratorBun}
-          type='top'
-          drag='hidden'
-        />
-        <div className={`${styles.optionalIngredients}`} style={{ display: 'flex', flexDirection: 'column', gap: '10px'}}>
-          <ListElement 
-            name='Соус традиционный галактический'
-            price='15'
-            image={galacticSauce}
-          />
-          <ListElement 
-            name='Сыр с астероидной плесенью'
-            price='4142'
-            image={cheese}
-          />
-          <ListElement 
-            name='Филе Люминесцентного тетраодонтимформа'
-            price='988'
-            image={meat}
-          />
-          <ListElement 
-            name='Соус фирменный Space Sauce'
-            price='80'
-            image={spaceSauce}
-          />
-          <ListElement 
-            name='Соус Spicy-X'
-            price='90'
-            image={spicyX}
-          />
+      <div className={'pt-25 pb-10'} style={{ display: 'flex', flexDirection: 'column', gap: '10px', border: borderColor}} ref={dropTarget}>
+        {[selectedBun].map((bun) => dataToIngredient(bun, -1, 'top'))}
+        <div className={`${styles.optionalIngredients}`} style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
+          {selectedIngredients.map((ingredient, index) => dataToIngredient(ingredient, index))}
         </div>
-        <ListElement 
-          name='Краторная булка N-200i'
-          price='1255'
-          image={cratorBun}
-          type='bot'
-          drag='hidden'
-        />
+        {[selectedBun].map((bun) => dataToIngredient(bun, -1, 'bottom'))}
       </div>
       <div className={`${styles.totalInfo}`}>
-        <Price price={500} size='medium'/>
+        <Price price={[...selectedIngredients, selectedBun, selectedBun].map(getPrices).reduce(getTotalPrice)} size='medium'/>
         <div className="pl-10">
           <Button type="primary" size="large" onClick={handleOpenModal}>
             Оформить заказ
@@ -141,7 +287,7 @@ export default function BurgerConstructor() {
       {
         modalVisible &&
         <Modal header={''} isVisible={modalVisible} onClose={handleCloseModal} box={{w: '720px', h: '720px'}}>
-          <OrderDetails {...modalData}/>
+          <OrderDetails />
         </Modal>
       }
     </div>
