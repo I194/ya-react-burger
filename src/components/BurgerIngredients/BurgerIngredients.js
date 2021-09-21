@@ -1,12 +1,14 @@
 import React, { useMemo, useState, useEffect } from 'react';
+import { BrowserRouter as Router, Link, Route, useHistory, useRouteMatch, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
+import PropTypes, { exact } from 'prop-types';
 import {Tab} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerIngredients.module.css';
 import Modal from '../Modal/Modal';
 import Ingredient from './Ingredient';
 import IngredientDetails from './IngredientDetails';
 import { getItems, SET_INGREDIENT_MODAL, DELETE_INGREDIENT_MODAL } from '../../services/actions/shop.js';
+import { IngredientPage } from '../../pages';
  
 function Headline(props) {
   return (
@@ -52,6 +54,8 @@ Col.propTypes = {
 export default function BurgerIngredients() {
 
   const dispatch = useDispatch();
+  const history = useHistory();
+  const { path } = useRouteMatch();
 
   // Ingredients 
   
@@ -70,13 +74,18 @@ export default function BurgerIngredients() {
   const dataToIngredient = (ingredients) => {
     return (
       <Col key={ingredients._id} onClick={() => {handleOpenModal(ingredients)}}>
-        <Ingredient 
-          name={ingredients.name} 
-          price={ingredients.price}
-          img={ingredients.image}
-          id={ingredients._id}
-          count={ingredients.__v}
-        />
+        <Link to={{
+          pathname: `/ingredients/${ingredients._id}`,
+          state: {modal: true}
+        }}>
+          <Ingredient 
+            name={ingredients.name} 
+            price={ingredients.price}
+            img={ingredients.image}
+            id={ingredients._id}
+            count={ingredients.__v}
+          />
+        </Link>
       </Col>
     )
   }
@@ -88,6 +97,7 @@ export default function BurgerIngredients() {
   const handleCloseModal = () => {
     dispatch({type: DELETE_INGREDIENT_MODAL})
     setVisibility(false);
+    history.push("/");
   }
 
   const handleOpenModal = (data) => {
@@ -122,36 +132,44 @@ export default function BurgerIngredients() {
 
   if (!ingredients.length) return null;
 
+  console.log(`${path}/ingredients/:id`)
+
   return (
-    <div className={`${styles.containerMain}`} style={{ textAlign: 'left'}} >
-      <p className={'text text_type_main-large pt-10 pb-5'}>Соберите бургер</p>
-      <div style={{ display: 'flex', width: '100%' }}>
-        <Tab value="buns" active={current === 'buns'} onClick={setTab}>
-          Булки
-        </Tab>
-        <Tab value="sauces" active={current === 'sauces'} onClick={setTab}>
-          Соусы
-        </Tab>
-        <Tab value="mains" active={current === 'mains'} onClick={setTab}>
-          Начинки
-        </Tab>
+    <>
+      <div className={`${styles.containerMain}`} style={{ textAlign: 'left'}} >
+        <p className={'text text_type_main-large pt-10 pb-5'}>Соберите бургер</p>
+        <div style={{ display: 'flex', width: '100%' }}>
+          <Tab value="buns" active={current === 'buns'} onClick={setTab}>
+            Булки
+          </Tab>
+          <Tab value="sauces" active={current === 'sauces'} onClick={setTab}>
+            Соусы
+          </Tab>
+          <Tab value="mains" active={current === 'mains'} onClick={setTab}>
+            Начинки
+          </Tab>
+        </div>
+        <div className={`${styles.ingredients}`} id='ingredients' onScroll={activateTab}>
+          <Headline id='buns'>Булки</Headline>
+          <Row>{buns.map(dataToIngredient)}</Row>
+          <Headline id='sauces'>Соусы</Headline>
+          <Row>{sauces.map(dataToIngredient)}</Row>
+          <Headline id='mains'>Начинки</Headline>
+          <Row>{mains.map(dataToIngredient)}</Row>
+        </div>
       </div>
-      <div className={`${styles.ingredients}`} id='ingredients' onScroll={activateTab}>
-        <Headline id='buns'>Булки</Headline>
-        <Row>{buns.map(dataToIngredient)}</Row>
-        <Headline id='sauces'>Соусы</Headline>
-        <Row>{sauces.map(dataToIngredient)}</Row>
-        <Headline id='mains'>Начинки</Headline>
-        <Row>{mains.map(dataToIngredient)}</Row>
-      </div>
-      {
-        modalVisible &&
-        <Modal header={'Детали ингредиента'} isVisible={modalVisible} onClose={handleCloseModal} box={{w: '720px', h: '540px'}}>
-          <IngredientDetails />
-        </Modal>
-      }
-      
-    </div>
+      {/* <Route path={`${path}ingredients/:id`} render={() => 
+        {
+        if (modalVisible) {return (
+          <Modal header={'Детали ингредиента'} isVisible={modalVisible} onClose={handleCloseModal} box={{w: '720px', h: '540px'}}>
+            <IngredientDetails />
+          </Modal>
+        )} 
+        else {return (
+          <IngredientPage />
+        )}
+      }}/> */}
+    </>
   )
 }
 

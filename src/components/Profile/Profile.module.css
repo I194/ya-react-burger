@@ -1,0 +1,53 @@
+.content {
+
+  position: relative;
+  width: 1240px;
+  left: calc(50vw - 600px - 20px);
+  /* 600px - block width,  20px - half width of burger in Logo*/
+
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  
+  margin-top: 120px;
+}
+
+.leftBlock {
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+
+  margin-right: 40px;
+  padding-left: 20px;
+}
+
+.menu {
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+}
+
+.rightBlock {
+  width: 480px;
+  display: flex;
+  flex-direction: column;
+}
+
+.longInput > div > div{
+  width: 480px!important;
+}
+
+.saveButton {
+  padding-top: 20px;
+  display: flex;
+  align-items: flex-end;
+  margin-left: auto;
+}
+
+.menuItem {
+  height: 64px;
+  display: flex;
+  align-items: center;
+}

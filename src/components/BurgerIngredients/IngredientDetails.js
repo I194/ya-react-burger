@@ -1,9 +1,11 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import styles from './BurgerIngredients.module.css';
 import Illustration from './Illustration';
 import Name from './Name';
+import { getItems } from '../../services/actions/shop';
 
 function NutritionDetail(props) {
 
@@ -44,7 +46,22 @@ NutritionDetail.propTypes = {
 
 export default function IngredientDetails() {
 
-  const ingredient = useSelector(state => state.shop.currentIngredient);
+  const dispatch = useDispatch();
+
+  const { id } = useParams();
+  const ingredients = useSelector(state => state.shop.ingredients);
+  
+  useEffect(() => {
+    if (!ingredients.length) dispatch(getItems());
+    },
+    [dispatch, ingredients]
+  );  
+
+  // const ingredient = useSelector(state => state.shop.currentIngredient);
+  const ingredient = ingredients.filter(ingr => ingr._id === id)[0];
+  console.log(id)
+
+  if (!ingredient) return null;
 
   return (
     <>

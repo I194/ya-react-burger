@@ -1,0 +1,16 @@
+.containerMain {
+  /* Auto Layout */
+
+  
+  position: relative;
+  width: 1240px;
+  left: calc(50vw - 600px - 20px);
+  /* 600px - block width,  20px - half width of burger in Logo*/
+
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-wrap: wrap;
+
+}

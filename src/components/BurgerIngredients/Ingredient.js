@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'; 
 import { useDrag } from "react-dnd";
 import PropTypes from 'prop-types';
 import {CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
