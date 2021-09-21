@@ -1,4 +1,5 @@
 import React from 'react';
+import { useDrag } from "react-dnd";
 import PropTypes from 'prop-types';
 import {CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerIngredients.module.css';
@@ -23,14 +24,13 @@ Price.propTypes = {
 
 function Counter(props) {
   return (
-    <div className={`${styles.counter}`} style={{visibility: `${props.visibility || 'visible'}`}}>
+    <div className={`${styles.counter}`} style={{visibility: `${props.count <= 0 ? 'hidden' : 'visible'}`}}>
       <p className="text text_type_digits-default pt-1">{props.count}</p>
     </div>
   )
 }
 
 Counter.propTypes = {
-  visibility: PropTypes.string.isRequired,
   count: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number
@@ -38,13 +38,21 @@ Counter.propTypes = {
 }
 
 export default function Ingredient(props) {
+
+  // Drag and Drop
+
+  const [, dragRef] = useDrag({
+    type: "ingredient",
+    item: {id: props.id}
+  });
+
   return (
-    <>
+    <div ref={dragRef}>
       <Illustration img={props.img} alt={props.name}/>
       <Price price={props.price}/>
       <Name name={props.name} />
-      <Counter count={props.count} visibility={props.visibility}/>
-    </>
+      <Counter count={props.count} />
+    </div>
   )
 }
 

@@ -1,13 +1,13 @@
-// app-header.js
-
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import {Tab} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerIngredients.module.css';
 import Modal from '../Modal/Modal';
 import Ingredient from './Ingredient';
 import IngredientDetails from './IngredientDetails';
-
+import { getItems, SET_INGREDIENT_MODAL, DELETE_INGREDIENT_MODAL } from '../../services/actions/shop.js';
+ 
 function Headline(props) {
   return (
     <p className={'text text_type_main-medium pt-10 pb-6'} style={{width: '100%'}} id={props.id}>{props.children}</p>
@@ -49,46 +49,78 @@ Col.propTypes = {
   ])
 }
 
-export default function BurgerIngredients(props) {
+export default function BurgerIngredients() {
 
-  const [modalVisible, setVisibility] = useState(false);
-  const [modalData, setModalData] = useState();
+  const dispatch = useDispatch();
+
+  // Ingredients 
   
-  const handleCloseModal = () => {
-    setVisibility(false);
-  }
+  const ingredients = useSelector(state => state.shop.ingredients);
 
-  const handleOpenModal = (data) => {
-    setVisibility(true);
-    setModalData(data);
-  }
+  useEffect(() => {
+    if (!ingredients.length) dispatch(getItems());
+    },
+    [dispatch, ingredients]
+  );  
 
-  const buns = useMemo(() => props.data.filter((item) => item.type === 'bun'), [props.data]);
-  const mains = useMemo(() => props.data.filter((item) => item.type === 'main'), [props.data]);
-  const sauces = useMemo(() => props.data.filter((item) => item.type === 'sauce'), [props.data]);
+  const buns = useMemo(() => ingredients.filter((item) => item.type === 'bun'), [ingredients]);
+  const mains = useMemo(() => ingredients.filter((item) => item.type === 'main'), [ingredients]);
+  const sauces = useMemo(() => ingredients.filter((item) => item.type === 'sauce'), [ingredients]);
 
-  const dataToIngredient = (data) => {
+  const dataToIngredient = (ingredients) => {
     return (
-      <Col key={data._id} onClick={() => {handleOpenModal(data)}}>
+      <Col key={ingredients._id} onClick={() => {handleOpenModal(ingredients)}}>
         <Ingredient 
-          name={data.name} 
-          price={data.price}
-          img={data.image}
-          visibility={'hidden'}
+          name={ingredients.name} 
+          price={ingredients.price}
+          img={ingredients.image}
+          id={ingredients._id}
+          count={ingredients.__v}
         />
       </Col>
     )
   }
 
+  // Modal 
+
+  const [modalVisible, setVisibility] = useState(false);
+  
+  const handleCloseModal = () => {
+    dispatch({type: DELETE_INGREDIENT_MODAL})
+    setVisibility(false);
+  }
+
+  const handleOpenModal = (data) => {
+    dispatch({
+      type: SET_INGREDIENT_MODAL,
+      ingredient: data
+    })
+    setVisibility(true);
+  }
+
+  // Tabs
+
   const [current, setCurrent] = useState('buns');
 
   const setTab = (tab) => {
-    console.log(tab)
     setCurrent(tab);
     const element = document.getElementById(tab);
-    console.log(element)
     if (element) element.scrollIntoView({ behavior: "smooth" });
   };
+
+  const activateTab = () => {
+    const tabs = ['buns', 'sauces', 'mains'];
+    const headings = tabs.map((id) => document.getElementById(id))
+    const scrollPosition = document.getElementById('ingredients').scrollTop;
+    headings.forEach((heading, iter) => {
+      const headingPosition = heading.offsetTop;
+      if (headingPosition <= scrollPosition + 200 && headingPosition >= scrollPosition - 200) {
+        setCurrent(tabs[iter]);
+      }
+    })
+  }
+
+  if (!ingredients.length) return null;
 
   return (
     <div className={`${styles.containerMain}`} style={{ textAlign: 'left'}} >
@@ -104,7 +136,7 @@ export default function BurgerIngredients(props) {
           Начинки
         </Tab>
       </div>
-      <div className={`${styles.ingredients}`}>
+      <div className={`${styles.ingredients}`} id='ingredients' onScroll={activateTab}>
         <Headline id='buns'>Булки</Headline>
         <Row>{buns.map(dataToIngredient)}</Row>
         <Headline id='sauces'>Соусы</Headline>
@@ -115,7 +147,7 @@ export default function BurgerIngredients(props) {
       {
         modalVisible &&
         <Modal header={'Детали ингредиента'} isVisible={modalVisible} onClose={handleCloseModal} box={{w: '720px', h: '540px'}}>
-          <IngredientDetails {...modalData}/>
+          <IngredientDetails />
         </Modal>
       }
       
@@ -123,6 +155,6 @@ export default function BurgerIngredients(props) {
   )
 }
 
-BurgerIngredients.propTypes = {
-  data: PropTypes.array.isRequired
-}
+// BurgerIngredients.propTypes = {
+//   data: PropTypes.array.isRequired
+// }

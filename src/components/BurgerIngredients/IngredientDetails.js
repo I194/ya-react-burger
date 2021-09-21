@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import styles from './BurgerIngredients.module.css';
 import Illustration from './Illustration';
@@ -41,38 +42,20 @@ NutritionDetail.propTypes = {
   ]).isRequired
 }
 
-export default function IngredientDetails(props) {
+export default function IngredientDetails() {
+
+  const ingredient = useSelector(state => state.shop.currentIngredient);
+
   return (
     <>
-      <Illustration img={props.image_large} alt={props.name}/>
-      <Name name={props.name} size={'medium'} box={'pb-8 pt-4'}/>
+      <Illustration img={ingredient.image_large} alt={ingredient.name}/>
+      <Name name={ingredient.name} size={'medium'} box={'pb-8 pt-4'}/>
       <div className={`${styles.nutritionDetails} pb-15`}>
-        <NutritionDetail nutritionType={'calories'} nutritionValue={props.calories} />
-        <NutritionDetail nutritionType={'proteins'} nutritionValue={props.proteins} />
-        <NutritionDetail nutritionType={'fat'} nutritionValue={props.fat} />
-        <NutritionDetail nutritionType={'carbohydrates'} nutritionValue={props.carbohydrates} />
+        <NutritionDetail nutritionType={'calories'} nutritionValue={ingredient.calories} />
+        <NutritionDetail nutritionType={'proteins'} nutritionValue={ingredient.proteins} />
+        <NutritionDetail nutritionType={'fat'} nutritionValue={ingredient.fat} />
+        <NutritionDetail nutritionType={'carbohydrates'} nutritionValue={ingredient.carbohydrates} />
       </div>
     </>
   )
-}
-
-IngredientDetails.propTypes = {
-  image_large: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  calories: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number
-  ]).isRequired,
-  proteins: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number
-  ]).isRequired,
-  fat: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number
-  ]).isRequired,
-  carbohydrates: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number
-  ]).isRequired
 }
