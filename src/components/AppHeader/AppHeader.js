@@ -45,9 +45,9 @@ function AppHeader() {
               Лента заказов
             </NavItem>
           </div>
-          <div className={`${styles.logo}`}>
+          <Link to={'/'} className={`${styles.logo}`}>
             <Logo />
-          </div>
+          </Link>
           <NavItem 
             icon={<ProfileIcon />} 
             exact={true}

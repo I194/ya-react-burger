@@ -282,7 +282,7 @@ export default function BurgerConstructor(props) {
           <div className={`${styles.totalInfo}`}>
             <Price price={[...selectedIngredients, selectedBun, selectedBun].map(getPrices).reduce(getTotalPrice)} size='medium'/>
             <div className="pl-10">
-              <Button type="primary" size="large" onClick={handleOpenModal}>
+              <Button type="primary" size="large" onClick={() => !!selectedBun.id ? handleOpenModal() : null}>
                 Оформить заказ
               </Button>
             </div>
