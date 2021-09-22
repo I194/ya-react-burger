@@ -4,35 +4,11 @@ const checkReponse = (res) => {
   return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
 };
 
-const setCookie = (name, value, time) => {
-  var expires = "";
-  if (time) {
-      var date = new Date();
-      date.setTime(date.getTime() + time);
-      expires = "; expires=" + date.toUTCString();
-  }
-  document.cookie = name + "=" + (value || "")  + expires + "; path=/";
-}
-const getCookie = name => {
-  var nameEQ = name + "=";
-  var cArr = document.cookie.split(';');
-  cArr.forEach((c, i) => {
-    while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-    if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
-  })
-  return null;
-}
-
-const eraseCookie = name => {   
-  document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-}
-
 export async function getIngredients() {
 
   return fetch(`${BURGER_API_URL}/ingredients`)
     .then(res => checkReponse(res))
     .then(data => data)
-    .catch(e => console.log(e))
 
 }
 
@@ -64,7 +40,6 @@ export async function getAccToken(token) {
   })
   .then(res => checkReponse(res))
   .then(data => data)
-  .catch(e => console.log(e))
 
 }
 
@@ -96,7 +71,6 @@ export async function updateUser(userData) {
   })
   .then(res => checkReponse(res))
   .then(data => console.log(data))
-  .catch(e => console.log(e))
   
 }
 
@@ -112,7 +86,6 @@ export async function postAuth(email, pass) {
   })
   .then(res => checkReponse(res))
   .then(data => data)
-  .catch(e => console.log(e))
 
 }
 
@@ -128,7 +101,6 @@ export async function postLogout(token) {
   })
   .then(res => checkReponse(res))
   .then(data => data)
-  .catch(e => console.log(e))
 
 }
 

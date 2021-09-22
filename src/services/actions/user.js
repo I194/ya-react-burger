@@ -11,34 +11,32 @@ export const CHANGE_USER_NAME = 'CHANGE_USER_NAME';
 export const CHANGE_USER_EMAIL = 'CHANGE_USER_EMAIL';
 export const CHANGE_USER_PASS = 'CHANGE_USER_PASS';
 
-
 export function addTokens(email, pass) {
   return function(disptach) {
-    postAuth(email, pass).then(res => {
-      if (res && res.success) {
-        localStorage.setItem('refreshToken', res.refreshToken);
-        localStorage.setItem('accessToken', res.accessToken);
-        localStorage.setItem('initTime', Date.now() / 1000)
-        disptach({type: ADD_TOKENS});
-      } else {
-        console.log(res);
-      }
-    })
+    postAuth(email, pass)
+      .then(res => {
+        if (res && res.success) {
+          localStorage.setItem('refreshToken', res.refreshToken);
+          localStorage.setItem('accessToken', res.accessToken);
+          localStorage.setItem('initTime', Date.now() / 1000)
+          disptach({type: ADD_TOKENS});
+        }
+      })
+      .catch(e => console.log(e));
   }
 }
 
 export function updateAccToken() {
   return function(dispatch) {
-    getAccToken(localStorage.refreshToken).then(res => {
-      if (res && res.success) {
-        localStorage.setItem('accessToken', res.accessToken);
-        localStorage.setItem('initTime', Date.now() / 1000)
-        dispatch({type: UPDATE_ACC_TOKEN, accessToken: res.accessToken})
-      }
-      else {
-        console.log(res);
-      }
-    })
+    getAccToken(localStorage.refreshToken)
+      .then(res => {
+        if (res && res.success) {
+          localStorage.setItem('accessToken', res.accessToken);
+          localStorage.setItem('initTime', Date.now() / 1000)
+          dispatch({type: UPDATE_ACC_TOKEN, accessToken: res.accessToken})
+        }
+      })
+      .catch(e => console.log(e));
   }
 }
 
@@ -53,23 +51,20 @@ export function getUserData() {
           })
         }
       })
-      .catch(e => {
-        console.log(e.message)
-      });
+      .catch(e => console.log(e));
   }
 }
 
 export function deleteUserData(token) {
   return function(dispatch) {
-    postLogout(token).then(res => {
-      if (res && res.success) {
-        dispatch({type: DELETE_USER_DATA});
-      } else {
-        console.log(res);
-      }
-    })
+    postLogout(token)
+      .then(res => {
+        if (res && res.success) {
+          dispatch({type: DELETE_USER_DATA});
+        } 
+      })
+      .catch(e => console.log(e));
   }
-  
 }
 
 export function sendResetPassCode(email) {

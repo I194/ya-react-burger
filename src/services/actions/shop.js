@@ -12,10 +12,6 @@ export const ADD_SELECTED_INGREDIENT = 'ADD_SELECTED_INGREDIENT';
 export const DELETE_SELECTED_INGREDIENT = 'DELETE_SELECTED_INGREDIENT'; 
 export const SET_SELECTED_INGREDIENTS = 'SET_SELECTED_INGREDIENTS';
 
-// export const GET_SELECTED_INGREDIENTS_REQUEST = 'GET_SELECTED_INGREDIENTS_REQUEST';
-// export const GET_SELECTED_INGREDIENTS_SUCCESS = 'GET_SELECTED_INGREDIENTS_SUCCESS';
-// export const GET_SELECTED_INGREDIENTS_FAILED = 'GET_SELECTED_INGREDIENTS_FAILED';
-
 export const SET_INGREDIENT_MODAL = 'SET_INGREDIENT_MODAL';
 export const DELETE_INGREDIENT_MODAL = 'DELETE_INGREDIENT_MODAL';
 
@@ -28,18 +24,20 @@ export function getItems() {
     dispatch({
       type: GET_INGREDIENTS_REQUEST,
     })
-    getIngredients().then(res => {
-      if (res && res.success) {
-        dispatch({
-          type: GET_INGREDIENTS_SUCCESS,
-          ingredients: res.data
-        })
-      } else {
-        dispatch({
-          type: GET_INGREDIENTS_FAILED
-        })
-      }
-    })
+    getIngredients()
+      .then(res => {
+        if (res && res.success) {
+          dispatch({
+            type: GET_INGREDIENTS_SUCCESS,
+            ingredients: res.data
+          })
+        } else {
+          dispatch({
+            type: GET_INGREDIENTS_FAILED
+          })
+        }
+      })
+      .catch(e => console.log(e));
   }
 }
 
@@ -48,26 +46,28 @@ export function getOrder(ingredientsId) {
     dispatch({
       type: GET_ORDER_REQUEST,
     })
-    postOrder(ingredientsId).then(res => {
-      if (res && res.success) {
-        dispatch({
-          type: GET_ORDER_SUCCESS,
-          order: res
-        })
-        dispatch({
-          type: SET_SELECTED_INGREDIENTS,
-          ingredients: []
-        })
-        dispatch({
-          type: CHANGE_SELECTED_BUN,
-          bunId: null
-        })
-        dispatch(getItems())
-      } else {
-        dispatch({
-          type: GET_ORDER_FAILED
-        })
-      }
-    })
+    postOrder(ingredientsId)
+      .then(res => {
+        if (res && res.success) {
+          dispatch({
+            type: GET_ORDER_SUCCESS,
+            order: res
+          })
+          dispatch({
+            type: SET_SELECTED_INGREDIENTS,
+            ingredients: []
+          })
+          dispatch({
+            type: CHANGE_SELECTED_BUN,
+            bunId: null
+          })
+          dispatch(getItems())
+        } else {
+          dispatch({
+            type: GET_ORDER_FAILED
+          })
+        }
+      })
+      .catch(e => console.log(e));
   }
 }
