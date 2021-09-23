@@ -26,6 +26,11 @@ function ForgotPass() {
     }
   }, [dispatch, userData])
 
+  function handleSubmit(event) {
+    event.preventDefault();
+    dispatch(sendResetPassCode(valueEmail));
+  }
+
   if (userData.refreshToken || localStorage.refreshToken) return (<Redirect to="/" />)
 
   if (userData.resetPass) return (<Redirect to="/reset-password" />)
@@ -35,15 +40,17 @@ function ForgotPass() {
       <p className="text text_type_main-medium">
         Восстановление пароля
       </p>
-      <div className='pt-6 pb-6'>
-        <Input 
-          type={'email'}
-          placeholder={'Укажите e-mail'}
-          value={valueEmail}
-          onChange={e => setValueEmail(e.target.value)}
-        />
-      </div>
-      <Button type="primary" size="medium" onClick={() => dispatch(sendResetPassCode(valueEmail))}>
+      <form action='' onSubmit={handleSubmit} id='form'>
+        <div className='pt-6 pb-6'>
+          <Input 
+            type={'email'}
+            placeholder={'Укажите e-mail'}
+            value={valueEmail}
+            onChange={e => setValueEmail(e.target.value)}
+          />
+        </div>
+      </form>
+      <Button type="primary" size="medium" form='form'>
         Восстановить
       </Button>
       <p className="text text_type_main-small text_color_inactive pt-20">

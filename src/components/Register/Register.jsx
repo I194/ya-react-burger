@@ -37,6 +37,11 @@ function Register() {
       icon: passParams.icon === 'ShowIcon' ? 'HideIcon' : 'ShowIcon'
     })
   }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    dispatch(addNewUser(valueEmail, valuePass, valueName));
+  }
   
   if (userData.refreshToken || localStorage.refreshToken) return (<Redirect to="/" />)
 
@@ -45,33 +50,35 @@ function Register() {
       <p className="text text_type_main-medium">
         Регистрация
       </p>
-      <div className='pt-6'>
-        <Input 
-          type={'text'} 
-          placeholder={'Имя'}
-          value={valueName}
-          onChange={e => setValueName(e.target.value)}
-        />
-      </div>
-      <div className='pb-6 pt-6'>
-        <Input
-          type={'email'}
-          placeholder={'E-mail'}
-          value={valueEmail}
-          onChange={e => setValueEmail(e.target.value)}
-        />
-      </div>
-      <div className='pb-6'>
-        <Input
-          type={passParams.type}
-          placeholder={'Пароль'}
-          icon={passParams.icon}
-          onIconClick={handleIconClick}
-          value={valuePass}
-          onChange={e => setValuePass(e.target.value)}
-        />
-      </div>
-      <Button type="primary" size="medium" onClick={() => dispatch(addNewUser(valueEmail, valuePass, valueName))}>
+      <form action='' onSubmit={handleSubmit} id='form'>
+        <div className='pt-6'>
+          <Input 
+            type={'text'} 
+            placeholder={'Имя'}
+            value={valueName}
+            onChange={e => setValueName(e.target.value)}
+          />
+        </div>
+        <div className='pb-6 pt-6'>
+          <Input
+            type={'email'}
+            placeholder={'E-mail'}
+            value={valueEmail}
+            onChange={e => setValueEmail(e.target.value)}
+          />
+        </div>
+        <div className='pb-6'>
+          <Input
+            type={passParams.type}
+            placeholder={'Пароль'}
+            icon={passParams.icon}
+            onIconClick={handleIconClick}
+            value={valuePass}
+            onChange={e => setValuePass(e.target.value)}
+          />
+        </div>
+      </form>
+      <Button type="primary" size="medium" form='form'>
         Зарегистрироваться
       </Button>
       <p className="text text_type_main-small text_color_inactive pt-20">

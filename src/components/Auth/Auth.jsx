@@ -36,33 +36,40 @@ function Auth() {
       icon: passParams.icon === 'ShowIcon' ? 'HideIcon' : 'ShowIcon'
     })
   }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    dispatch(addTokens(valueEmail, valuePass));
+  }
   
   if (userData.refreshToken || localStorage.refreshToken) return (<Redirect to={ redirectState ? redirectState.from : '/' } />)
-
+  
   return (
     <div className={`${styles.content}`}>
       <p className="text text_type_main-medium">
         Вход
       </p>
-      <div className='pb-6 pt-6'>
-        <Input
-          type={'email'}
-          placeholder={'E-mail'}
-          value={valueEmail}
-          onChange={e => setValueEmail(e.target.value)}
-        />
-      </div>
-      <div className='pb-6'>
-        <Input
-          type={passParams.type}
-          placeholder={'Пароль'}
-          icon={passParams.icon}
-          onIconClick={handleIconClick}
-          value={valuePass}
-          onChange={e => setValuePass(e.target.value)}
-        />
-      </div>
-      <Button type="primary" size="medium" onClick={() => dispatch(addTokens(valueEmail, valuePass))}>
+      <form action='' onSubmit={handleSubmit} id='form'>
+        <div className='pb-6 pt-6'>
+          <Input
+            type={'email'}
+            placeholder={'E-mail'}
+            value={valueEmail}
+            onChange={e => setValueEmail(e.target.value)}
+          />
+        </div>
+        <div className='pb-6'>
+          <Input
+            type={passParams.type}
+            placeholder={'Пароль'}
+            icon={passParams.icon}
+            onIconClick={handleIconClick}
+            value={valuePass}
+            onChange={e => setValuePass(e.target.value)}
+          />
+        </div>
+      </form>
+      <Button type="primary" size="medium" form='form'>
         Войти
       </Button>
       <p className="text text_type_main-small text_color_inactive pt-20">

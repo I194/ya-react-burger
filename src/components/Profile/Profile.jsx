@@ -32,6 +32,11 @@ function Profile() {
 
   const [activePage, setActivePage] = useState('profile')
 
+  function handleSubmit(event) {
+    event.preventDefault();
+    updateUser(userData.user)
+  }
+
   if (!localStorage.refreshToken) return (<Redirect to='/login' />);
 
   return (
@@ -67,6 +72,7 @@ function Profile() {
         </div>
       </div>
       <div className={styles.rightBlock}>
+      <form action='' onSubmit={handleSubmit} className={`${styles.innerContent}`} id='form'>
         <div className={styles.longInput}>
           <Input 
             type={'text'} 
@@ -95,14 +101,15 @@ function Profile() {
             onChange={e => dispatch({type: CHANGE_USER_PASS, password: e.target.value})}
           />
         </div>
-        <div className={styles.saveButton}>
-          <Button type='secondary' size='medium' onClick={() => getUser()}>
-            Отмена
-          </Button>
-          <Button type='primary' size='medium' onClick={() => updateUser(userData.user)}>
-            Сохранить
-          </Button>
-        </div>
+      </form>
+      <div className={styles.saveButton}>
+        <Button type='secondary' size='medium' onClick={() => getUser()}>
+          Отмена
+        </Button>
+        <Button type='primary' size='medium' form='form'>
+          Сохранить
+        </Button>
+      </div>
       </div>
     </div>
   )

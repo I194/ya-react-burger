@@ -37,6 +37,11 @@ function ResetPass() {
     })
   }
 
+  function handleSubmit(event) {
+    event.preventDefault();
+    dispatch(setNewPass(valuePass, valueCode));
+  }
+
   if (userData.refreshToken || localStorage.refreshToken || !userData.resetPass) return (<Redirect to="/" />)
 
   return (
@@ -44,26 +49,28 @@ function ResetPass() {
       <p className="text text_type_main-medium">
         Восстановление пароля
       </p>
-      <div className='pt-6'>
-        <Input 
-          type={passParams.type} 
-          placeholder={'Введите новый пароль'} 
-          icon={passParams.icon} 
-          onIconClick={handleIconClick}
-          value={valuePass}
-          onChange={e => setValuePass(e.target.value)}
-        />
-      </div>
-      <div className='pt-6 pb-6'>
-        <Input 
-          type={'text'} 
-          placeholder={'Введите код из письма'} 
-          name={'name'}
-          value={valueCode}
-          onChange={e => setValueCode(e.target.value)}
-        />
-      </div>
-      <Button type="primary" size="medium" onClick={() => dispatch(setNewPass(valuePass, valueCode))}>
+      <form action='' onSubmit={handleSubmit} id='form'>
+        <div className='pt-6'>
+          <Input 
+            type={passParams.type} 
+            placeholder={'Введите новый пароль'} 
+            icon={passParams.icon} 
+            onIconClick={handleIconClick}
+            value={valuePass}
+            onChange={e => setValuePass(e.target.value)}
+          />
+        </div>
+        <div className='pt-6 pb-6'>
+          <Input 
+            type={'text'} 
+            placeholder={'Введите код из письма'} 
+            name={'name'}
+            value={valueCode}
+            onChange={e => setValueCode(e.target.value)}
+          />
+        </div>
+      </form>
+      <Button type="primary" size="medium" form='form'>
         Сохранить
       </Button>
       <p className="text text_type_main-small text_color_inactive pt-20">
