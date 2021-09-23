@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import update from 'immutability-helper';
 import { useDispatch, useSelector } from 'react-redux';
 import { useDrag, useDrop } from "react-dnd";
@@ -146,6 +147,7 @@ ListElement.propTypes = {
 export default function BurgerConstructor(props) {
 
   const dispatch = useDispatch();
+  const history = useHistory();
 
   // Order details (Modal)
   
@@ -160,6 +162,7 @@ export default function BurgerConstructor(props) {
   }
 
   const handleOpenModal = () => {
+    if (!localStorage.refreshToken) return history.push('/login');
     dispatch(getOrder([...selectedIngredients, selectedBun, selectedBun].map(getIngredientsId)));
     setVisibility(true);
   }
@@ -279,7 +282,7 @@ export default function BurgerConstructor(props) {
           <div className={`${styles.totalInfo}`}>
             <Price price={[...selectedIngredients, selectedBun, selectedBun].map(getPrices).reduce(getTotalPrice)} size='medium'/>
             <div className="pl-10">
-              <Button type="primary" size="large" onClick={handleOpenModal}>
+              <Button type="primary" size="large" onClick={() => !!selectedBun.id ? handleOpenModal() : null}>
                 Оформить заказ
               </Button>
             </div>

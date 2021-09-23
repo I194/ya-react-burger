@@ -74,6 +74,7 @@
     /* interface/modal-bg */
 
     background: #1C1C21;
+    color: #8585AD;
     /* interface/accent */
 
     /* border: 1px dashed #4C4CFF;
@@ -87,6 +88,15 @@
     flex-grow: 0; */
     margin: 0px 4px;
 }   
+
+.navigationLink>div>svg {
+    fill: #8585AD;
+}
+
+.chosen, .chosen>div>svg {
+    color: white;
+    fill: white;
+}
 
 .icon24 {
     /* icon 24x24
@@ -135,4 +145,5 @@
     position: absolute;
     left: calc(50% - 145px);
     right: 0%;
+    width: 290px;
 }

@@ -1,21 +1,42 @@
 import React from 'react';
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import AppHeader from '../AppHeader/AppHeader';
-import BurgerIngredients from '../BurgerIngredients/BurgerIngredients';
-import BurgerConstructor from '../BurgerConstructor/BurgerConstructor';
+import { ConstructorPage, LoginPage, RegisterPage, ForgotPasswordPage, ResetPasswordPage, ProfilePage, IngredientPage, NotFound404 } from '../../pages';
 import styles from './App.module.css';
+import { ProtectedRoute } from '../ProtectedRoute/ProtectedRoute';
 
 function App() {
   return (
     <div className="App">
-      <AppHeader />
-      <DndProvider backend={HTML5Backend}>
-        <div className={`${styles.containerMain}`}>
-          <BurgerIngredients />
-          <BurgerConstructor/>
-        </div>
-      </DndProvider>
+      <Router>
+        <AppHeader />
+        <Switch>
+          <Route path='/login'>
+            <LoginPage />
+          </Route>
+          <Route path='/register'>
+            <RegisterPage />
+          </Route>
+          <Route path='/forgot-password'>
+            <ForgotPasswordPage />
+          </Route>
+          <Route path='/reset-password'>
+            <ResetPasswordPage />
+          </Route>
+          <ProtectedRoute path='/profile'>
+            <ProfilePage />
+          </ProtectedRoute>
+          <ProtectedRoute path='/profile/orders'>
+            <ProfilePage />
+          </ProtectedRoute>
+          {/* <Route path='/ingredients/:id' exact={true}>
+            <IngredientPage />
+          </Route> */}
+          <Route path='/'>
+            <ConstructorPage />
+          </Route>
+        </Switch>
+      </Router>
     </div>
   );
 }

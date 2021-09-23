@@ -12,10 +12,6 @@ import {
   DELETE_SELECTED_INGREDIENT,
   SET_SELECTED_INGREDIENTS,
 
-  // GET_SELECTED_INGREDIENTS_FAILED,
-  // GET_SELECTED_INGREDIENTS_REQUEST,
-  // GET_SELECTED_INGREDIENTS_SUCCESS,
-
   SET_INGREDIENT_MODAL,
   DELETE_INGREDIENT_MODAL,
 
@@ -31,7 +27,7 @@ const initialState = {
   ingredientsRequest: false,
   ingredientsFailed: false,
 
-  selectedBun: {id: null, uid: 0},//{id: "60d3b41abdacab0026a733c6", uid: 0},
+  selectedBun: {id: null, uid: 0},
   selectedIngredients: [],
   selectedIngredientsRequest: false,
   selectedIngredientsFailed: false,
