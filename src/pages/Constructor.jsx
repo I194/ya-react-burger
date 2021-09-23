@@ -18,9 +18,8 @@ export const ConstructorPage = () => {
   const history = useHistory();
 
   const isModal = !!(
-    location.state && location.state.modal
-  ); // получаем true или false
-  // const isModal = false;
+    location.state && location.state.modal && (history.action !== 'POP')
+  );
 
   const handleCloseModal = () => {
     location.state.modal = false;
