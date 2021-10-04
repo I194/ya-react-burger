@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import AppHeader from '../AppHeader/AppHeader';
-import { ConstructorPage, LoginPage, RegisterPage, ForgotPasswordPage, ResetPasswordPage, ProfilePage, IngredientPage, NotFound404 } from '../../pages';
+import { ConstructorPage, LoginPage, RegisterPage, ForgotPasswordPage, ResetPasswordPage, ProfilePage, IngredientPage, NotFound404, FeedPage } from '../../pages';
 import styles from './App.module.css';
 import { ProtectedRoute } from '../ProtectedRoute/ProtectedRoute';
 
@@ -22,6 +22,9 @@ function App() {
           </Route>
           <Route path='/reset-password'>
             <ResetPasswordPage />
+          </Route>
+          <Route path='/feed'>
+            <FeedPage />
           </Route>
           <ProtectedRoute path='/profile'>
             <ProfilePage />

@@ -40,7 +40,7 @@ function AppHeader() {
             <NavItem 
               icon={<ListIcon />}
               exact={false}
-              linkTo={'/profile/orders'}
+              linkTo={'/feed'}
             >
               Лента заказов
             </NavItem>
