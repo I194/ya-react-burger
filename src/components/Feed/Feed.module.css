@@ -196,3 +196,11 @@
   padding-top: 40px;
   width: 640px;
 }
+
+.navigationLink {
+  color: #8585AD;
+}   
+
+.chosen {
+  color: white;
+}

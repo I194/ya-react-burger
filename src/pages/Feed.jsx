@@ -10,7 +10,7 @@ export const FeedPage = () => {
     <>
       <Switch>
         <Route path={`${path}`} exact>
-          <Feed />
+          <Feed path={path}/>
         </Route>
         <Route path={`${path}/:id`}>
           <OrderDetails />

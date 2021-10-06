@@ -1,14 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './Profile.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { CHANGE_USER_EMAIL, CHANGE_USER_NAME, CHANGE_USER_PASS, deleteUserData, getUserData, updateAccToken } from '../../services/actions/user';
 import { updateUser } from '../../utils/burger-api';
+import OrderList from '../Feed/OrderList';
 
 
-function Profile() {
+function Profile({path}) {
 
   const dispatch = useDispatch();
   
@@ -72,44 +73,51 @@ function Profile() {
         </div>
       </div>
       <div className={styles.rightBlock}>
-      <form action='' onSubmit={handleSubmit} className={`${styles.innerContent}`} id='form'>
-        <div className={styles.longInput}>
-          <Input 
-            type={'text'} 
-            placeholder={'Имя'}
-            icon={'EditIcon'}
-            size={'default'}
-            value={userData.user.name}
-            onChange={e => dispatch({type: CHANGE_USER_NAME, name: e.target.value})}
-          />
-        </div>
-        <div className={`${styles.longInput} pb-6 pt-6`}>
-          <Input 
-            type={'text'} 
-            placeholder={'Логин'}
-            icon={'EditIcon'}
-            value={userData.user.email}
-            onChange={e => dispatch({type: CHANGE_USER_EMAIL, email: e.target.value})}
-          />
-        </div>
-        <div className={styles.longInput}>
-          <Input 
-            type={'password'} 
-            placeholder={'Пароль'}
-            icon={'EditIcon'}
-            value={userData.user.password}
-            onChange={e => dispatch({type: CHANGE_USER_PASS, password: e.target.value})}
-          />
-        </div>
-      </form>
-      <div className={styles.saveButton}>
-        <Button type='secondary' size='medium' onClick={() => getUser()}>
-          Отмена
-        </Button>
-        <Button type='primary' size='medium' form='form'>
-          Сохранить
-        </Button>
-      </div>
+        <Switch>
+          <Route path={`${path}`} exact>
+            <form action='' onSubmit={handleSubmit} className={`${styles.innerContent}`} id='form'>
+              <div className={styles.longInput}>
+                <Input 
+                  type={'text'} 
+                  placeholder={'Имя'}
+                  icon={'EditIcon'}
+                  size={'default'}
+                  value={userData.user.name}
+                  onChange={e => dispatch({type: CHANGE_USER_NAME, name: e.target.value})}
+                />
+              </div>
+              <div className={`${styles.longInput} pb-6 pt-6`}>
+                <Input 
+                  type={'text'} 
+                  placeholder={'Логин'}
+                  icon={'EditIcon'}
+                  value={userData.user.email}
+                  onChange={e => dispatch({type: CHANGE_USER_EMAIL, email: e.target.value})}
+                />
+              </div>
+              <div className={styles.longInput}>
+                <Input 
+                  type={'password'} 
+                  placeholder={'Пароль'}
+                  icon={'EditIcon'}
+                  value={userData.user.password}
+                  onChange={e => dispatch({type: CHANGE_USER_PASS, password: e.target.value})}
+                />
+              </div>
+            </form>
+            <div className={styles.saveButton}>
+              <Button type='secondary' size='medium' onClick={() => getUser()}>
+                Отмена
+              </Button>
+              <Button type='primary' size='medium' form='form'>
+                Сохранить
+              </Button>
+            </div>
+          </Route>
+          <Route path={`${path}/orders`}>
+            <OrderList path={`${path}/orders`}/>
+          </Route>
+        </Switch>
       </div>
     </div>
   )
