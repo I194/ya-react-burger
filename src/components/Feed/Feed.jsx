@@ -32,11 +32,15 @@ function OrderIngredients({ingredients}) {
 
 function CardOrder() {
   return (
-    <div className={styles.cardOrder}>
-      <OrderIdTime _id={'#03435'} time={'Сегодня, 16:20 i-GMT+3'}/>
-      <p className="text text_type_main-medium pr-6 pl-6">Death Star Starship Main бургер</p>
-      <OrderIngredients />
-    </div>
+    <Link to={{
+      pathname: `/feed/03435`,
+    }}>
+      <div className={styles.cardOrder}>
+        <OrderIdTime _id={`#03435`} time={'Сегодня, 16:20 i-GMT+3'}/>
+        <p className="text text_type_main-medium pr-6 pl-6">Death Star Starship Main бургер</p>
+        <OrderIngredients />
+      </div>
+    </Link>
   )
 }
 
