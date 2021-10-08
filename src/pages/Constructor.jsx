@@ -50,7 +50,8 @@ export const ConstructorPage = () => {
           </Modal>
         </Route> 
         :
-        null}
+        null
+      }
     </>
   )
 }

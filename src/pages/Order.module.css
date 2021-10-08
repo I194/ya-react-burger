@@ -1,0 +1,9 @@
+.orderContainer {
+  padding-top: 122px;
+
+  width: 640px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}

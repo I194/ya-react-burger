@@ -17,7 +17,7 @@ function Price({children}) {
 function OrderIdTime({_id, time}) {
   return (
     <div className={styles.orderId}>
-      <p className="text text_type_digits-defaultn">{_id}</p>
+      <p className="text text_type_digits-default">{_id}</p>
       <p className="text text_type_main-default text_color_inactive">{time}</p>
     </div>
   )
@@ -43,6 +43,7 @@ function CardOrder({path, _id}) {
   return (
     <Link to={{
       pathname: `${path}/${_id}`,
+      state: {modal: true, _id: _id}
     }}>
       <div className={styles.cardOrder}>
         <OrderIdTime _id={`#${_id}`} time={'Сегодня, 16:20 i-GMT+3'}/>

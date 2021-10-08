@@ -140,9 +140,9 @@
 /* Order page */
 
 .orderContainer {
-  padding-top: 122px;
+  /* padding-top: 122px;
 
-  width: 640px;
+  width: 640px; */
   margin: auto;
   display: flex;
   align-items: center;
@@ -195,12 +195,4 @@
 
   padding-top: 40px;
   width: 640px;
-}
-
-.navigationLink {
-  color: #8585AD;
-}   
-
-.chosen {
-  color: white;
 }

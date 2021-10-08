@@ -7,5 +7,11 @@ import { ProfilePage } from './Profile';
 import { NotFound404 } from './NotFound';
 import { IngredientPage } from './Ingredient';
 import { FeedPage } from './Feed';
+import { OrderPage } from './Order';
 
-export { ConstructorPage, LoginPage, RegisterPage, ForgotPasswordPage, ResetPasswordPage, ProfilePage, IngredientPage, FeedPage, NotFound404 };
+export { 
+  ConstructorPage, LoginPage, RegisterPage,
+  ForgotPasswordPage, ResetPasswordPage, ProfilePage, 
+  IngredientPage, FeedPage, NotFound404,
+  OrderPage,
+};

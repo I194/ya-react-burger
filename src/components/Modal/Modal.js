@@ -6,9 +6,11 @@ import { createPortal } from 'react-dom';
 import ModalOverlay from './ModalOverlay';
 
 function ModalHeader (props) {
+  const headerClass = props.headerClass ? props.headerClass : 'text text_type_main-large';
+
   return (
     <div className={`${styles.modalHeader}`}>
-      <p className={'text text_type_main-large'}>{props.children}</p>
+      <p className={headerClass} >{props.children}</p>
       <CloseIcon onClick={props.onClick} />
     </div>
   )

@@ -31,7 +31,6 @@ function IngredientRow({name, count, price}) {
 function OrderDetails() {
   return (
     <div className={styles.orderContainer}>
-      <p className="text text_type_digits-default pb-10">#03425</p>
       <div style={{textAlign: 'left', width: '640px'}}>
         <p className="text text_type_main-medium pb-3">Black Hole Singularity острый бургер</p>
         <p className="text text_type_main-default pb-15" style={{color: '#00CCCC'}}>Выполнен</p>

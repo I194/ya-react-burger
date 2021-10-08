@@ -59,8 +59,7 @@ export default function IngredientDetails() {
 
   // const ingredient = useSelector(state => state.shop.currentIngredient);
   const ingredient = ingredients.filter(ingr => ingr._id === id)[0];
-  console.log(id)
-
+  
   if (!ingredient) return null;
 
   return (
