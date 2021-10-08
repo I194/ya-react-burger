@@ -16,7 +16,7 @@ export const ProfilePage = () => {
 
   const handleCloseModal = () => {
     location.state.modal = false;
-    history.push(path);
+    history.push(`${path}/orders`);
   }
   
   return (
