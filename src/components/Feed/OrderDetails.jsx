@@ -4,6 +4,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './Feed.module.css';
 import { useDispatch, useSelector } from 'react-redux';
+import { getItems, getOrdersFeed } from '../../services/actions/shop';
 
 function Price({children}) {
   return (
@@ -14,12 +15,12 @@ function Price({children}) {
   )
 }
 
-function IngredientRow({name, count, price}) {
+function IngredientRow({name, count, price, image}) {
   return (
     <div className={styles.ingredientRow}>
       <div className={styles.ingredientImageName}>
         <div className={`${styles.ingredientPreview} mr-4`}>
-          <img className={styles.ingredientImage} src="https://code.s3.yandex.net/react/code/bun-01.png" alt="Флюоресцентная булка R2-D3 (верх)" />
+          <img className={styles.ingredientImage} src={image} alt={name} />
         </div>
         <p className="text text_type_main-default mr-4">{name}</p>
       </div>
@@ -28,24 +29,60 @@ function IngredientRow({name, count, price}) {
   )
 }
 
-function OrderDetails() {
+function OrderDetails({_id}) {
+
+  const dispatch = useDispatch();
+
+  const orders = useSelector(state => state.shop.orders);
+  const ingredients = useSelector(state => state.shop.ingredients);
+  
+  useEffect(() => {
+    if (!ingredients.length) dispatch(getItems());
+    },
+    [dispatch, ingredients]
+  );  
+
+  useEffect(() => {
+    if (!orders.length) dispatch(getOrdersFeed());
+    },
+    [dispatch, orders]
+  );    
+
+  if (!orders.length || !ingredients.length || !_id) return null;
+
+  const order = orders.filter(ord => ord._id === _id)[0];
+  
+  const nameSize = order.name.length > 84 ? 'default' : 'medium';
+  const status = order.status === 'done' ? 'готов' : 'не готов';
+  
+  let price = 0;
+
+  const uniqueIngredients = order.ingredients.reduce(function(occurrence, item) {
+    occurrence[item] = (occurrence[item] || 0) + 1;
+    return occurrence;
+  }, {});
+  
+  const dataToIngredientRow = (ingredientId, index) => {
+    const ingredient = ingredients.filter(ingr => ingr._id === ingredientId)[0];
+    price += ingredient.price;
+    return (
+      <IngredientRow key={ingredient._id} name={ingredient.name} count={uniqueIngredients[ingredientId]} price={ingredient.price} image={ingredient.image}/>
+    )
+  }
+
   return (
     <div className={styles.orderContainer}>
       <div style={{textAlign: 'left', width: '640px'}}>
-        <p className="text text_type_main-medium pb-3">Black Hole Singularity острый бургер</p>
-        <p className="text text_type_main-default pb-15" style={{color: '#00CCCC'}}>Выполнен</p>
+        <p className={`text text_type_main-${nameSize} pb-3`}>{order.name}</p>
+        <p className="text text_type_main-default pb-15 " style={{color: '#00CCCC'}}>{status}</p>
         <p className="text text_type_main-medium pb-6">Состав:</p>
       </div>
       <div className={styles.ingredientsColumn}>
-        <IngredientRow name={'Флюоресцентная булка R2-D3'} count={232} price={2320} />
-        <IngredientRow name={'Флюоресцентная булка R2-D3'} count={232} price={2320} />
-        <IngredientRow name={'Флюоресцентная булка R2-D3'} count={232} price={2320} />
-        <IngredientRow name={'Флюоресцентная булка R2-D3'} count={232} price={2320} />
-        <IngredientRow name={'Флюоресцентная булка R2-D3'} count={232} price={2320} />
+        {Object.keys(uniqueIngredients).map(dataToIngredientRow)}
       </div>
       <div className={styles.orderTimePrice}>
-        <p className="text text_type_main-default text_color_inactive">Вчера, 13:50 i-GMT+3</p>
-        <Price>510</Price>
+        <p className="text text_type_main-default text_color_inactive">{order.createdAt}</p>
+        <Price>{price}</Price>
       </div>
     </div>
   )

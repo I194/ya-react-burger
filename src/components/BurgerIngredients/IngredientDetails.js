@@ -56,8 +56,7 @@ export default function IngredientDetails() {
     },
     [dispatch, ingredients]
   );  
-
-  // const ingredient = useSelector(state => state.shop.currentIngredient);
+  
   const ingredient = ingredients.filter(ingr => ingr._id === id)[0];
   
   if (!ingredient) return null;

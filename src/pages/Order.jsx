@@ -8,7 +8,7 @@ export const OrderPage = () => {
   return (
     <div className={styles.orderContainer}>
       <p className="text text_type_digits-default pb-10">#{id}</p>
-      <OrderDetails />
+      <OrderDetails _id={id}/>
     </div>
   )
 }

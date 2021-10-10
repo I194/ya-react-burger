@@ -40,7 +40,7 @@ export const FeedPage = () => {
             onClose={handleCloseModal} 
             box={{w: '720px', h: '720px'}}
           >
-            <OrderDetails />
+            <OrderDetails _id={location.state._id}/>
           </Modal>
         </Route> 
         :

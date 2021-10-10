@@ -18,6 +18,9 @@ import {
   GET_ORDER_REQUEST,
   GET_ORDER_SUCCESS,
   GET_ORDER_FAILED,
+  GET_ORDERS_REQUEST,
+  GET_ORDERS_SUCCESS,
+  GET_ORDERS_FAILED,
 
 } from '../actions/shop';
 
@@ -37,6 +40,12 @@ const initialState = {
   order: null,
   orderRequest: false,
   orderFailed: false,
+
+  orders: [],
+  totalOrders: null,
+  todayOrders: null,
+  ordersRequest: false,
+  ordersFailed: false,
 
 }
 
@@ -167,6 +176,30 @@ export const shopReducer = (state = initialState, action) => {
         ...state,
         orderRequest: false,
         orderFailed: true,
+      }
+    }
+    // Orders in feed and orders history
+    case GET_ORDERS_REQUEST: {
+      return {
+        ...state,
+        ordersRequest: true
+      }
+    }
+    case GET_ORDERS_SUCCESS: {
+      return {
+        ...state,
+        ordersRequest: false,
+        ordersFailed: false,
+        orders: action.orders,
+        totalOrders: action.total,
+        todayOrders: action.today
+      }
+    }
+    case GET_ORDERS_FAILED: {
+      return {
+        ...state,
+        ordersRequest: false,
+        ordersFailed: true,
       }
     }
     default: {

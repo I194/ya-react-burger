@@ -5,6 +5,7 @@ import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components
 import styles from './Feed.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import OrderList from './OrderList';
+import { getOrdersFeed } from '../../services/actions/shop';
 
 function Completed({text, number}) {
   return (
@@ -20,11 +21,35 @@ function Completed({text, number}) {
 }
 
 function Feed({path}) {
+
+  const dispatch = useDispatch();
+
+  const orders = useSelector(state => state.shop.orders);
+  const totalOrders = useSelector(state => state.shop.totalOrders);
+  const todayOrders = useSelector(state => state.shop.todayOrders);
+
+  useEffect(() => {
+    if (!orders.length) dispatch(getOrdersFeed());
+    },
+    [dispatch, orders]
+  );  
+
+  const doneOrders = orders.filter(order => order.status === 'done');
+  const inProgressOrders = orders.filter(order => order.status !== 'done');
+
+  const dataToIdList = (order, index) => {
+    return (
+      <p className="text text_type_main-small pb-2">
+        {`#${order._id}`}
+      </p>
+    )
+  }
+
   return (
     <div className={styles.content}>
       <div className={styles.leftBlock}>
         <p className={'text text_type_main-large pt-10 pb-5'}>Лента заказов</p>
-        <OrderList path={path}/>
+        <OrderList path={path} orders={orders}/>
       </div>
       <div className={styles.rightBlock}>
         <div className={styles.ordersBoard}>
@@ -33,40 +58,20 @@ function Feed({path}) {
               Готовы:
             </p>
             <div style={{color: '#00CCCC'}}>
-              <p className="text text_type_digits-default pb-2">
-                034533
-              </p>
-              <p className="text text_type_digits-default pb-2">
-                034532
-              </p>
-              <p className="text text_type_digits-default pb-2">
-                034531
-              </p>
-              <p className="text text_type_digits-default pb-2">
-                034530
-              </p>
-              <p className="text text_type_digits-default pb-2">
-                034525
-              </p>
+              {doneOrders.map(dataToIdList)}
             </div>
           </div>
           <div className={styles.ordersList}>
             <p className="text text_type_main-medium pb-6">
               В работе:
             </p>
-            <p className="text text_type_digits-default pb-2">
-              034538
-            </p>
-            <p className="text text_type_digits-default pb-2">
-              034537
-            </p>
-            <p className="text text_type_digits-default pb-2">
-              034536
-            </p>
+            <div style={{color: '#00CCCC'}}>
+              {inProgressOrders.map(dataToIdList)}
+            </div>
           </div>
         </div>
-        <Completed text={'Выполнено за всё время:'} number={28752}/>
-        <Completed text={'Выполнено за сегодня:'} number={53}/>
+        <Completed text={'Выполнено за всё время:'} number={totalOrders}/>
+        <Completed text={'Выполнено за сегодня:'} number={todayOrders}/>
       </div>
     </div>
   )

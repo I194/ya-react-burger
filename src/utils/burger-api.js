@@ -28,6 +28,14 @@ export async function postOrder(ingredientsId) {
 
 }
 
+export async function getOrders() {
+
+  return fetch(`${BURGER_API_URL}/orders/all`)
+    .then(res => checkReponse(res))
+    .then(data => data)
+
+}
+
 export async function getAccToken(token) {
 
   return fetch(`${BURGER_API_URL}/auth/token`, {

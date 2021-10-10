@@ -1,4 +1,4 @@
-import { getIngredients, postOrder } from '../../utils/burger-api';
+import { getIngredients, getOrders, postOrder } from '../../utils/burger-api';
 
 export const GET_INGREDIENTS_REQUEST = 'GET_INGREDIENTS_REQUEST';
 export const GET_INGREDIENTS_SUCCESS = 'GET_INGREDIENTS_SUCCESS';
@@ -18,6 +18,10 @@ export const DELETE_INGREDIENT_MODAL = 'DELETE_INGREDIENT_MODAL';
 export const GET_ORDER_REQUEST = 'GET_ORDER_ID_REQUEST';
 export const GET_ORDER_SUCCESS = 'GET_ORDER_ID_SUCCESS';
 export const GET_ORDER_FAILED = 'GET_ORDER_ID_FAILED';
+
+export const GET_ORDERS_REQUEST = 'GET_ORDERS_REQUEST';
+export const GET_ORDERS_SUCCESS = 'GET_ORDERS_SUCCESS';
+export const GET_ORDERS_FAILED = 'GET_ORDERS_FAILED';
 
 export function getItems() {
   return function(dispatch) {
@@ -65,6 +69,30 @@ export function getOrder(ingredientsId) {
         } else {
           dispatch({
             type: GET_ORDER_FAILED
+          })
+        }
+      })
+      .catch(e => console.log(e));
+  }
+}
+
+export function getOrdersFeed() {
+  return function(dispatch) {
+    dispatch({
+      type: GET_ORDERS_REQUEST,
+    })
+    getOrders()
+      .then(res => {
+        if (res && res.success) {
+          dispatch({
+            type: GET_ORDERS_SUCCESS,
+            orders: res.orders,
+            total: res.total,
+            today: res.totalToday
+          })
+        } else {
+          dispatch({
+            type: GET_ORDERS_FAILED
           })
         }
       })
