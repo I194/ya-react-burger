@@ -1,4 +1,4 @@
-import { getIngredients, getOrders, postOrder } from '../../utils/burger-api';
+import { getIngredients, getOrders, getUserOrders, postOrder } from '../../utils/burger-api';
 
 export const GET_INGREDIENTS_REQUEST = 'GET_INGREDIENTS_REQUEST';
 export const GET_INGREDIENTS_SUCCESS = 'GET_INGREDIENTS_SUCCESS';
@@ -22,6 +22,13 @@ export const GET_ORDER_FAILED = 'GET_ORDER_ID_FAILED';
 export const GET_ORDERS_REQUEST = 'GET_ORDERS_REQUEST';
 export const GET_ORDERS_SUCCESS = 'GET_ORDERS_SUCCESS';
 export const GET_ORDERS_FAILED = 'GET_ORDERS_FAILED';
+
+export const WS_CONNECTION_START = 'WS_CONNECTION_START';
+export const WS_CONNECTION_SUCCESS = 'WS_CONNECTION_SUCCESS'; 
+export const WS_CONNECTION_ERROR = 'WS_CONNECTION_ERROR';
+export const WS_CONNECTION_CLOSED = 'WS_CONNECTION_CLOSED';
+export const WS_GET_MESSAGE = 'WS_GET_MESSAGE';
+export const WS_SEND_MESSAGE = 'WS_SEND_MESSAGE';
 
 export function getItems() {
   return function(dispatch) {
@@ -96,6 +103,31 @@ export function getOrdersFeed() {
           })
         }
       })
-      .catch(e => console.log(e));
+      .catch(e => console.log(e))
+  }
+}
+
+export function getOrdersFeedUser() {
+  return function(dispatch) {
+    dispatch({
+      type: GET_ORDERS_REQUEST,
+    })
+    getUserOrders()
+      .then(res => {
+        console.log(res);
+        if (res && res.success) {
+          dispatch({
+            type: GET_ORDERS_SUCCESS,
+            orders: res.orders,
+            total: res.total,
+            today: res.totalToday
+          })
+        } else {
+          dispatch({
+            type: GET_ORDERS_FAILED
+          })
+        }
+      })
+      .catch(e => console.log(e))
   }
 }

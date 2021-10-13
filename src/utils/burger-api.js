@@ -36,6 +36,21 @@ export async function getOrders() {
 
 }
 
+export async function getUserOrders() {
+  // console.log(localStorage.accessToken, `${BURGER_API_URL}/orders?token=${localStorage.accessToken.split(' ')[1]}`);
+  return fetch(`${BURGER_API_URL}/orders?token=${localStorage.accessToken.split(' ')[1]}`, {
+    method: "GET", 
+    headers: {
+      'Accept': 'application/json, text/plain, */*',
+      'Content-Type': 'application/json',
+      'Authorization': localStorage.accessToken
+    }
+  })
+  .then(res => checkReponse(res))
+  .then(data => data)
+
+}
+
 export async function getAccToken(token) {
 
   return fetch(`${BURGER_API_URL}/auth/token`, {

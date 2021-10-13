@@ -1,0 +1,1 @@
+export const getWsConnected = state => state.chat.wsConnected;

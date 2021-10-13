@@ -94,9 +94,6 @@ export default function OrderList({path, orders}) {
   return (
     <div className={styles.orders}>
       {orders.map(dataToOrder)}
-      {/* <CardOrder path={path} _id={`03435`}/>
-      <CardOrder path={path} _id={`03435`}/>
-      <CardOrder path={path} _id={`03435`}/> */}
     </div>
   )
 }
