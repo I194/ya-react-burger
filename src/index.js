@@ -16,7 +16,9 @@ const composeEnhancers =
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
     : compose;
 
-const wsUrl = `wss://norma.nomoreparties.space/api/orders?token=${localStorage.accessToken.split(' ')[1]}`;
+const token = localStorage.accessToken ? `?token=${localStorage.accessToken.split(' ')[1]}` : ''
+
+const wsUrl = `wss://norma.nomoreparties.space/api/orders${token}`;
 
 const wsActions = {
   wsInit: WS_CONNECTION_START,

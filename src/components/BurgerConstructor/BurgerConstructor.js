@@ -290,7 +290,7 @@ export default function BurgerConstructor(props) {
         </>
         :
         <>
-          <div className={'mt-25 pt-30 pb-30'} style={{ display: 'flex', flexDirection: 'column', gap: '10px', border: borderColor}} ref={dropTarget}>
+          <div className={'mt-25 pt-30 pb-30'} style={{ display: 'flex', flexDirection: 'column', gap: '10px', border: borderColor}} ref={dropTarget} id='drop-target'>
             <p className={`text text_type_main-medium pb-2 pl-10 pr-10 pt-2`} style={{textAlign: 'center'}}>
               Перенесите в эту область булку и другие ингредиенты для бургера 
             </p>
