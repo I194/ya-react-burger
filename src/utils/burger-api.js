@@ -18,7 +18,8 @@ export async function postOrder(ingredientsId) {
       method: "POST", 
       headers: {
         'Accept': 'application/json, text/plain, */*',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.accessToken
       },
       body: JSON.stringify({ingredients: ingredientsId})
     })

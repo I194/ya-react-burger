@@ -5,7 +5,7 @@ import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-component
 import styles from './Profile.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { CHANGE_USER_EMAIL, CHANGE_USER_NAME, CHANGE_USER_PASS, deleteUserData, getUserData, updateAccToken } from '../../services/actions/user';
-import { getOrders, updateUser } from '../../utils/burger-api';
+import { updateUser } from '../../utils/burger-api';
 import OrderList from '../Feed/OrderList';
 import { getOrdersFeed, getOrdersFeedUser, WS_CONNECTION_START } from '../../services/actions/shop';
 import { getMessages, getWsConnected } from '../../services/selectors';
@@ -14,10 +14,8 @@ import { getMessages, getWsConnected } from '../../services/selectors';
 function Profile({path}) {
 
   const dispatch = useDispatch();
-  const messages = useSelector(getOrders);
-  // const orders = useSelector(state => state.shop.orders);
-  // const totalOrders = useSelector(state => state.shop.totalOrders);
-  // const todayOrders = useSelector(state => state.shop.todayOrders);
+  // const messages = useSelector(getOrders);
+  const messages = useSelector(state => state.shop.messages)
   
   const userData = useSelector(state => state.user);
   
@@ -38,10 +36,8 @@ function Profile({path}) {
   }, [userData, getUser])
 
   useEffect(() => {
-    if (userData) {
-      dispatch({ type: WS_CONNECTION_START });
-    }
-  }, [userData, dispatch]);  
+    dispatch({ type: WS_CONNECTION_START });
+  }, [updateAccToken]);  
 
   const [activePage, setActivePage] = useState('profile')
 
@@ -51,8 +47,7 @@ function Profile({path}) {
   }
 
   if (!localStorage.refreshToken) return (<Redirect to='/login' />);
-  // debugger
-  messages.then(res => console.log(res));
+  
   return (
     <div className={`${styles.content}`}>
       <div className={styles.leftBlock}>
@@ -128,7 +123,7 @@ function Profile({path}) {
             </div>
           </Route>
           <Route path={`${path}/orders`}>
-            <OrderList path={`${path}/orders`} />
+            <OrderList path={`${path}/orders`} orders={messages[0].orders}/>
           </Route>
         </Switch>
       </div>

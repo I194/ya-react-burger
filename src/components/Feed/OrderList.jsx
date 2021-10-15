@@ -77,7 +77,7 @@ function CardOrder({path, _id, ingredients, time, name}) {
 }
 
 export default function OrderList({path, orders}) {
-  
+  console.log(orders, path);
   const dataToOrder = (order) => {
     return (
       <CardOrder 
@@ -93,7 +93,7 @@ export default function OrderList({path, orders}) {
 
   return (
     <div className={styles.orders}>
-      {orders.map(dataToOrder)}
+      {orders?.map(dataToOrder)}
     </div>
   )
 }

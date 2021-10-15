@@ -18,7 +18,7 @@ const composeEnhancers =
 
 const token = localStorage.accessToken ? `?token=${localStorage.accessToken.split(' ')[1]}` : ''
 
-const wsUrl = `wss://norma.nomoreparties.space/api/orders${token}`;
+const wsUrl = `wss://norma.nomoreparties.space/orders${token}`;
 
 const wsActions = {
   wsInit: WS_CONNECTION_START,

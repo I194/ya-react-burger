@@ -5,25 +5,16 @@ import { CheckMarkIcon } from '@ya.praktikum/react-developer-burger-ui-component
 import styles from './BurgerConstructor.module.css';
 import { getOrder, SET_SELECTED_INGREDIENTS, CHANGE_SELECTED_BUN } from '../../services/actions/shop';
 
-export default function OrderDetails(props) {
-
-  const dispatch = useDispatch();
+export default function OrderDetails() {
   
   const orderData = useSelector(state => state.shop.order);
-  const selectedBun = useSelector(state => state.shop.selectedBun);
-  const selectedIngredients = useSelector(state => state.shop.selectedIngredients);
 
-  const getIngredientsId = (ingredient) => {
-    return ingredient.id;
-  }
-
-  useEffect(() => {
-    if (!orderData) {
-      dispatch(getOrder([...selectedIngredients, selectedBun, selectedBun].map(getIngredientsId)));
-    }
-  }, [dispatch, orderData, selectedBun, selectedIngredients])
-
-  if (!orderData) return null;
+  if (!orderData) return (
+    <>
+      <p className={`text text_type_main-medium`}>Заказ оформляется...</p>
+      <div className={`${styles.doneImage}`}></div>
+    </>
+  );
 
   return (
     <div className={`${styles.oderDetail}`}>
@@ -40,10 +31,3 @@ export default function OrderDetails(props) {
     </div>
   )
 }
-
-// OrderDetails.propTypes = {
-//   id: PropTypes.oneOfType([
-//     PropTypes.string,
-//     PropTypes.number
-//   ]).isRequired,
-// }

@@ -19,6 +19,7 @@ import {
   CHANGE_SELECTED_BUN,
   SET_SELECTED_INGREDIENTS,
 } from '../../services/actions/shop.js';
+import { updateAccToken } from '../../services/actions/user';
 
 function Price(props) {
   if (!props.size) props.size = 'default';
@@ -178,6 +179,10 @@ export default function BurgerConstructor(props) {
     },
     [dispatch, ingredients]
   ); 
+
+  useEffect(() => {
+    dispatch(updateAccToken());
+  }, [dispatch])
 
   const dataToIngredient = (ingredientId, index, position) => {
     const ingredient = ingredients.filter(ingr => ingr._id === ingredientId.id)[0];

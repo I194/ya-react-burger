@@ -12,7 +12,6 @@ export const socketMiddleware = (wsUrl) => {
         socket = new WebSocket(wsUrl);
       }
       if (socket) {
-
         socket.onopen = event => {
           dispatch({ type: 'WS_CONNECTION_SUCCESS', payload: event });
         };
@@ -24,11 +23,13 @@ export const socketMiddleware = (wsUrl) => {
         socket.onmessage = event => {
           const { data } = event;
           const parsedData = JSON.parse(data);
+          console.log(parsedData)
           dispatch({ type: 'WS_GET_MESSAGE', payload: parsedData });
         };
 
         socket.onclose = event => {
           dispatch({ type: 'WS_CONNECTION_CLOSED', payload: event });
+          dispatch({ type: 'WS_CONNECTION_START' });
         };
 
         if (type === 'WS_SEND_MESSAGE') {

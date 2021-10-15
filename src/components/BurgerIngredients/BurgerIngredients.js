@@ -132,8 +132,6 @@ export default function BurgerIngredients() {
 
   if (!ingredients.length) return null;
 
-  console.log(`${path}/ingredients/:id`)
-
   return (
     <>
       <div className={`${styles.containerMain}`} style={{ textAlign: 'left'}} >
