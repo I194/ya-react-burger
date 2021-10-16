@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { FunctionComponent, useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import update from 'immutability-helper';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,72 +20,52 @@ import {
   SET_SELECTED_INGREDIENTS,
 } from '../../services/actions/shop.js';
 import { updateAccToken } from '../../services/actions/user';
+import { IConstructorList, IIngredient, IPrice } from '../../services/types/components';
 
-function Price(props) {
-  if (!props.size) props.size = 'default';
+const Price: FunctionComponent<IPrice> = ({size, price}) => {
+  if (!size) size = 'default';
 
   let iconSize = styles.default;
-  if (props.size === 'medium') iconSize = styles.medium; 
+  if (size === 'medium') iconSize = styles.medium; 
 
   return (
     <div className={`${styles.price} ${iconSize}`}>
-      <p className={`text text_type_digits-${props.size} mr-2`}>{props.price}</p>
+      <p className={`text text_type_digits-${size} mr-2`}>{price}</p>
       <CurrencyIcon type="primary"/>
     </div>
   )
 }
 
-Price.propTypes = {
-  size: PropTypes.string.isRequired,
-  price: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number
-  ]).isRequired,
-}
-
-const ListElement = (props) => {
+const ListElement: FunctionComponent<IConstructorList> = ({index, moveIngredientHandler, type, name, price, image, uid, id}) => {
 
   const dispatch = useDispatch();
 
-  const ref = useRef(null);
+  const ref = useRef<HTMLInputElement>(null);
 
   const [, drop] = useDrop({
     accept: 'selectedIngredient',
-    hover(item, monitor) {
+    hover(item: any, monitor: any) {
       if (!ref.current) {
         return;
       }
       const dragIndex = item.index;
-      const hoverIndex = props.index;
-      // Don't replace items with themselves
+      const hoverIndex = index;
+
       if (dragIndex === hoverIndex) {
         return;
       }
-      // Determine rectangle on screen
+
       const hoverBoundingRect = ref.current?.getBoundingClientRect();
-      // Get vertical middle
       const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-      // Determine mouse position
       const clientOffset = monitor.getClientOffset();
-      // Get pixels to the top
-      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
-      // Only perform the move when the mouse has crossed half of the items height
-      // When dragging downwards, only move when the cursor is below 50%
-      // When dragging upwards, only move when the cursor is above 50%
-      // Dragging downwards
+      const hoverClientY = clientOffset!.y - hoverBoundingRect.top;
       if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
         return;
       }
-      // Dragging upwards
       if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
         return;
       }
-      // Time to actually perform the action
-      props.moveIngredientHandler(dragIndex, hoverIndex);
-      // Note: we're mutating the monitor item here!
-      // Generally it's better to avoid mutations,
-      // but it's good here for the sake of performance
-      // to avoid expensive index searches.
+      moveIngredientHandler(dragIndex, hoverIndex);
       item.index = hoverIndex;
     },
   })
@@ -93,7 +73,7 @@ const ListElement = (props) => {
   const [{handlerId, isDragging}, drag] = useDrag({
     type: 'selectedIngredient',
     item: () => {
-      return { id: props.uid, index: props.index };
+      return { id: uid, index: index };
     },
     collect: (monitor) => ({
       handlerId: monitor.getHandlerId(),
@@ -105,7 +85,7 @@ const ListElement = (props) => {
 
   let isLocked = false;
   
-  if (props.type === 'top' || props.type === 'bottom') isLocked = true;
+  if (type === 'top' || type === 'bottom') isLocked = true;
   else drop(ref); drag(ref); 
 
   return (
@@ -114,19 +94,19 @@ const ListElement = (props) => {
        <DragIcon type='primary'/>
       </div>
       <ConstructorElement
-        text={props.name + (props.type === 'top' ? ' (верх)' : '') + (props.type === 'bottom' ? ' (низ)' : '')}
-        price={props.price}
-        thumbnail={props.image}
-        type={props.type}
+        text={name + (type === 'top' ? ' (верх)' : '') + (type === 'bottom' ? ' (низ)' : '')}
+        price={price}
+        thumbnail={image}
+        type={type}
         isLocked={isLocked}
         handleClose={() => {
           dispatch({
             type: DECREASE_INGREDIENT_COUNT,
-            id: props.id
+            id: id
           })
           dispatch({
             type: DELETE_SELECTED_INGREDIENT,
-            uid: props.uid
+            uid: uid
           })
         }}
       />
@@ -134,18 +114,7 @@ const ListElement = (props) => {
   )
 }
 
-ListElement.propTypes = {
-  name: PropTypes.string.isRequired,
-  type: PropTypes.string,
-  price: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number
-  ]).isRequired,
-  drag: PropTypes.string,
-  image: PropTypes.string.isRequired,
-}
-
-export default function BurgerConstructor(props) {
+const BurgerConstructor = () => {
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -154,7 +123,7 @@ export default function BurgerConstructor(props) {
   
   const [modalVisible, setVisibility] = useState(false);
 
-  const getIngredientsId = (ingredient) => {
+  const getIngredientsId = (ingredient: { id: string; }) => {
     return ingredient.id;
   }
 
@@ -181,11 +150,11 @@ export default function BurgerConstructor(props) {
   ); 
 
   useEffect(() => {
-    dispatch(updateAccToken(localStorage.refreshToken));
+    dispatch(updateAccToken());
   }, [dispatch])
 
-  const dataToIngredient = (ingredientId, index, position) => {
-    const ingredient = ingredients.filter(ingr => ingr._id === ingredientId.id)[0];
+  const dataToIngredient = (ingredientId: { id: string; uid: string; }, index: number, position: string | undefined) => {
+    const ingredient = ingredients.filter((ingr: { _id: string; }) => ingr._id === ingredientId.id)[0];
 
     return (
       <ListElement 
@@ -204,21 +173,21 @@ export default function BurgerConstructor(props) {
 
   // Total price
 
-  const getPrices = (ingredientId) => {
+  const getPrices = (ingredientId: { id: string; }) => {
     if (!ingredientId.id) return 0;
-    const ingredient = ingredients.filter(ingr => ingr._id === ingredientId.id)[0];
+    const ingredient = ingredients.filter((ingr: { _id: string; }) => ingr._id === ingredientId.id)[0];
 
     return ingredient.price;
   }
 
-  const getTotalPrice = (acc, val) => acc + val;
+  const getTotalPrice = (acc: number, val: number) => acc + val;
 
   // onDrop (get ingredients from BurgerIngredients)
 
   const [{isHover}, dropTarget] = useDrop({
     accept: "ingredient",
-    drop(ingredient) {
-      const ingredientFull = ingredients.filter(ingr => ingr._id === ingredient.id)[0];
+    drop(ingredient: IIngredient) {
+      const ingredientFull = ingredients.filter((ingr: { _id: any; }) => ingr._id === ingredient.id)[0];
       if (ingredientFull.type === 'bun') {
         dispatch({
           type: SET_INGREDIENT_COUNT,
@@ -280,7 +249,7 @@ export default function BurgerConstructor(props) {
           <div className={'pt-25 pb-10'} style={{ display: 'flex', flexDirection: 'column', gap: '10px', border: borderColor}} ref={dropTarget}>
             {selectedBun.id && [selectedBun].map((bun) => dataToIngredient(bun, -1, 'top'))}
             <div className={`${styles.optionalIngredients}`} style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
-              {selectedIngredients.map((ingredient, index) => dataToIngredient(ingredient, index))}
+              {selectedIngredients.map((ingredient: { id: string; uid: string; }, index: number) => dataToIngredient(ingredient, index, undefined))}
             </div>
             {selectedBun.id && [selectedBun].map((bun) => dataToIngredient(bun, -1, 'bottom'))}
           </div>
@@ -311,3 +280,5 @@ export default function BurgerConstructor(props) {
     </div>
   )
 }
+
+export default BurgerConstructor;

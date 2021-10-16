@@ -1,61 +1,37 @@
-import React, { useMemo, useState, useEffect } from 'react';
-import { BrowserRouter as Router, Link, Route, useHistory, useRouteMatch, useLocation } from 'react-router-dom';
+import React, { useMemo, useState, useEffect, FunctionComponent } from 'react';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import PropTypes, { exact } from 'prop-types';
 import {Tab} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerIngredients.module.css';
-import Modal from '../Modal/Modal';
 import Ingredient from './Ingredient';
-import IngredientDetails from './IngredientDetails';
-import { getItems, SET_INGREDIENT_MODAL, DELETE_INGREDIENT_MODAL } from '../../services/actions/shop.js';
-import { IngredientPage } from '../../pages';
+import { getItems, SET_INGREDIENT_MODAL} from '../../services/actions/shop.js';
+import { ICol, IHeadline } from '../../services/types/components';
  
-function Headline(props) {
+const Headline: FunctionComponent<IHeadline> = ({id, children}) => {
   return (
-    <p className={'text text_type_main-medium pt-10 pb-6'} style={{width: '100%'}} id={props.id}>{props.children}</p>
+    <p className={'text text_type_main-medium pt-10 pb-6'} style={{width: '100%'}} id={id}>{children}</p>
   )
 }
 
-Headline.propTypes = {
-  children: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired
-} 
-
-function Row(props) {
+const Row: FunctionComponent = ({children}) => {
   return (
     <div className={`${styles.columnsPuns}`} style={{textAlign: 'center'}}>
-      {props.children}
+      {children}
     </div>
   )
 }
 
-Row.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.element,
-    PropTypes.node,
-  ])
-}
-
-function Col(props) {
+const Col: FunctionComponent<ICol> = ({onClick, children}) => {
   return (
-    <div className={`${styles.col}`} onClick={props.onClick}>
-      {props.children}
+    <div className={`${styles.col}`} onClick={onClick}>
+      {children}
     </div>
   )
 }
 
-Col.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.element,
-    PropTypes.node,
-  ])
-}
-
-export default function BurgerIngredients() {
+const BurgerIngredients = () => {
 
   const dispatch = useDispatch();
-  const history = useHistory();
-  const { path } = useRouteMatch();
 
   // Ingredients 
   
@@ -67,11 +43,11 @@ export default function BurgerIngredients() {
     [dispatch, ingredients]
   );  
 
-  const buns = useMemo(() => ingredients.filter((item) => item.type === 'bun'), [ingredients]);
-  const mains = useMemo(() => ingredients.filter((item) => item.type === 'main'), [ingredients]);
-  const sauces = useMemo(() => ingredients.filter((item) => item.type === 'sauce'), [ingredients]);
+  const buns = useMemo(() => ingredients.filter((item: { type: string; }) => item.type === 'bun'), [ingredients]);
+  const mains = useMemo(() => ingredients.filter((item: { type: string; }) => item.type === 'main'), [ingredients]);
+  const sauces = useMemo(() => ingredients.filter((item: { type: string; }) => item.type === 'sauce'), [ingredients]);
 
-  const dataToIngredient = (ingredients) => {
+  const dataToIngredient = (ingredients: { _id: string; name: string; price: string | number; image: string; __v: number; }) => {
     return (
       <Col key={ingredients._id} onClick={() => {handleOpenModal(ingredients)}}>
         <Link to={{
@@ -81,7 +57,7 @@ export default function BurgerIngredients() {
           <Ingredient 
             name={ingredients.name} 
             price={ingredients.price}
-            img={ingredients.image}
+            image={ingredients.image}
             id={ingredients._id}
             count={ingredients.__v}
           />
@@ -92,27 +68,18 @@ export default function BurgerIngredients() {
 
   // Modal 
 
-  const [modalVisible, setVisibility] = useState(false);
-  
-  const handleCloseModal = () => {
-    dispatch({type: DELETE_INGREDIENT_MODAL})
-    setVisibility(false);
-    history.push("/");
-  }
-
-  const handleOpenModal = (data) => {
+  const handleOpenModal = (data: { _id: string; name: string; price: string | number; image: string; __v: number; }) => {
     dispatch({
       type: SET_INGREDIENT_MODAL,
       ingredient: data
     })
-    setVisibility(true);
   }
 
   // Tabs
 
   const [current, setCurrent] = useState('buns');
 
-  const setTab = (tab) => {
+  const setTab = (tab: string) => {
     setCurrent(tab);
     const element = document.getElementById(tab);
     if (element) element.scrollIntoView({ behavior: "smooth" });
@@ -121,9 +88,9 @@ export default function BurgerIngredients() {
   const activateTab = () => {
     const tabs = ['buns', 'sauces', 'mains'];
     const headings = tabs.map((id) => document.getElementById(id))
-    const scrollPosition = document.getElementById('ingredients').scrollTop;
+    const scrollPosition = document.getElementById('ingredients')!.scrollTop;
     headings.forEach((heading, iter) => {
-      const headingPosition = heading.offsetTop;
+      const headingPosition = heading!.offsetTop;
       if (headingPosition <= scrollPosition + 200 && headingPosition >= scrollPosition - 200) {
         setCurrent(tabs[iter]);
       }
@@ -156,21 +123,8 @@ export default function BurgerIngredients() {
           <Row>{mains.map(dataToIngredient)}</Row>
         </div>
       </div>
-      {/* <Route path={`${path}ingredients/:id`} render={() => 
-        {
-        if (modalVisible) {return (
-          <Modal header={'Детали ингредиента'} isVisible={modalVisible} onClose={handleCloseModal} box={{w: '720px', h: '540px'}}>
-            <IngredientDetails />
-          </Modal>
-        )} 
-        else {return (
-          <IngredientPage />
-        )}
-      }}/> */}
     </>
   )
 }
 
-// BurgerIngredients.propTypes = {
-//   data: PropTypes.array.isRequired
-// }
+export default BurgerIngredients;

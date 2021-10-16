@@ -11,10 +11,11 @@ import { IngredientPage } from ".";
 import styles from './Constructor.module.css';
 import Modal from "../components/Modal/Modal";
 import IngredientDetails from "../components/BurgerIngredients/IngredientDetails";
+import { ILocationState } from "../services/types/components";
 
 export const ConstructorPage = () => {
   const { path } = useRouteMatch();
-  const location = useLocation();
+  const location = useLocation<ILocationState>();
   const history = useHistory();
 
   const isModal = !!(

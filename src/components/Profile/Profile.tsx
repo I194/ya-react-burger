@@ -1,5 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { FunctionComponent, useCallback, useEffect, useState } from 'react';
 import { Link, Redirect, Route, Switch, useLocation } from 'react-router-dom';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './Profile.module.css';
@@ -8,9 +7,10 @@ import { CHANGE_USER_EMAIL, CHANGE_USER_NAME, CHANGE_USER_PASS, deleteUserData, 
 import { updateUser } from '../../utils/burger-api';
 import OrderList from '../Feed/OrderList';
 import { WS_CONNECTION_START } from '../../services/actions/shop';
+import { IProfile } from '../../services/types/components';
 
 
-function Profile({path}) {
+const Profile: FunctionComponent<IProfile> = ({path}) => {
 
   const dispatch = useDispatch();
   const location = useLocation();
@@ -42,7 +42,7 @@ function Profile({path}) {
 
   const [activePage, setActivePage] = useState('profile')
 
-  function handleSubmit(event) {
+  function handleSubmit(event: { preventDefault: () => void; }) {
     event.preventDefault();
     updateUser(userData.user)
   }

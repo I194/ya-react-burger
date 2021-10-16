@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import { Link, Redirect } from 'react-router-dom';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import { postNewPass } from '../../utils/burger-api';
 import styles from './ResetPass.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUserData, GET_USER_DATA, setNewPass, updateAccToken } from '../../services/actions/user';
+import { getUserData, setNewPass, updateAccToken } from '../../services/actions/user';
 
 
 function ResetPass() {
@@ -30,14 +28,14 @@ function ResetPass() {
   const [valuePass, setValuePass] = useState('');
   const [valueCode, setValueCode] = useState('');
 
-  const handleIconClick = e => {
+  const handleIconClick = () => {
     setPassParams({
       type: passParams.type === 'password' ? 'text' : 'password',
       icon: passParams.icon === 'ShowIcon' ? 'HideIcon' : 'ShowIcon'
     })
   }
 
-  function handleSubmit(event) {
+  function handleSubmit(event: { preventDefault: () => void; }) {
     event.preventDefault();
     dispatch(setNewPass(valuePass, valueCode));
   }

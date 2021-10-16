@@ -1,13 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { Link, Redirect, useRouteMatch } from 'react-router-dom';
-import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import React, { FunctionComponent, useEffect } from 'react';
 import styles from './Feed.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import OrderList from './OrderList';
 import { getOrdersFeed } from '../../services/actions/shop';
+import { ICompleted, IFeed } from '../../services/types/components';
 
-function Completed({text, number}) {
+const Completed: FunctionComponent<ICompleted> = ({text, number}) => {
   return (
     <div className={styles.completed}>
       <p className="text text_type_main-medium">
@@ -20,7 +18,7 @@ function Completed({text, number}) {
   )
 }
 
-function Feed({path}) {
+const Feed: FunctionComponent<IFeed> = ({path}) => {
 
   const dispatch = useDispatch();
 
@@ -34,12 +32,12 @@ function Feed({path}) {
     [dispatch, orders]
   );  
 
-  const doneOrders = orders.filter(order => order.status === 'done');
-  const inProgressOrders = orders.filter(order => order.status !== 'done');
+  const doneOrders = orders.filter((order: { status: string; }) => order.status === 'done');
+  const inProgressOrders = orders.filter((order: { status: string; }) => order.status !== 'done');
 
-  const dataToIdList = (order, index) => {
+  const dataToIdList = (order: { _id: string; }, index: number) => {
     return (
-      <p className="text text_type_main-small pb-2">
+      <p className="text text_type_main-small pb-2" key={index}>
         {`#${order._id}`}
       </p>
     )

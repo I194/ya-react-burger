@@ -1,12 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { Link, Redirect } from 'react-router-dom';
+import React, { FunctionComponent, useEffect } from 'react';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './Feed.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { getItems, getOrdersFeed, WS_CONNECTION_START } from '../../services/actions/shop';
+import { getItems, getOrdersFeed } from '../../services/actions/shop';
+import { IIngredientsRow, IOrderDetails } from '../../services/types/components';
 
-function Price({children}) {
+const Price: FunctionComponent = ({children}) => {
   return (
     <div className={`${styles.price}`}>
       <p className="text text_type_digits-default mr-2">{children}</p>
@@ -15,7 +14,7 @@ function Price({children}) {
   )
 }
 
-function IngredientRow({name, count, price, image}) {
+const IngredientsRow: FunctionComponent<IIngredientsRow> = ({name, count, price, image}) => {
   return (
     <div className={styles.ingredientRow}>
       <div className={styles.ingredientImageName}>
@@ -29,7 +28,7 @@ function IngredientRow({name, count, price, image}) {
   )
 }
 
-function OrderDetails({_id, orders}) {
+const OrderDetails: FunctionComponent<IOrderDetails> = ({_id, orders}) => {
 
   const dispatch = useDispatch();
 
@@ -60,16 +59,16 @@ function OrderDetails({_id, orders}) {
   
   let price = 0;
 
-  const uniqueIngredients = order.ingredients.reduce(function(occurrence, item) {
+  const uniqueIngredients = order.ingredients.reduce(function(occurrence: any, item) {
     occurrence[item] = (occurrence[item] || 0) + 1;
     return occurrence;
   }, {});
   
-  const dataToIngredientRow = (ingredientId, index) => {
-    const ingredient = ingredients.filter(ingr => ingr._id === ingredientId)[0];
+  const dataToIngredientRow = (ingredientId: string | number) => {
+    const ingredient = ingredients.filter((ingr: { _id: string | number; }) => ingr._id === ingredientId)[0];
     price += ingredient.price;
     return (
-      <IngredientRow key={ingredient._id} name={ingredient.name} count={uniqueIngredients[ingredientId]} price={ingredient.price} image={ingredient.image}/>
+      <IngredientsRow key={ingredient._id} name={ingredient.name} count={uniqueIngredients[ingredientId]} price={ingredient.price} image={ingredient.image}/>
     )
   }
 

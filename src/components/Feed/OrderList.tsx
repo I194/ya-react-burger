@@ -1,13 +1,12 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { Link, Redirect, useRouteMatch } from 'react-router-dom';
+import React, { FunctionComponent, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './Feed.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { getItems } from '../../services/actions/shop';
-import data from '../../utils/data';
+import { ICardOrder, IOrder, IOrderDetails, IOrderIdTime, IOrderIngredients, IOrderList } from '../../services/types/components';
 
-function Price({children}) {
+const Price: FunctionComponent = ({children}) => {
   return (
     <div className={`${styles.price}`}>
       <p className="text text_type_digits-default mr-2">{children}</p>
@@ -16,7 +15,7 @@ function Price({children}) {
   )
 }
 
-function OrderIdTime({_id, time}) {
+const OrderIdTime: FunctionComponent<IOrderIdTime> = ({_id, time}) => {
   return (
     <div className={styles.orderId}>
       <p className="text text_type_main-small" style={{maxWidth: '258px'}}>{_id}</p>
@@ -25,7 +24,7 @@ function OrderIdTime({_id, time}) {
   )
 }
 
-function OrderIngredients({ingredientsId}) {
+const OrderIngredients: FunctionComponent<IOrderIngredients> = ({ingredientsId}) => {
 
   const dispatch = useDispatch();
   const ingredients = useSelector(state => state.shop.ingredients);
@@ -38,12 +37,12 @@ function OrderIngredients({ingredientsId}) {
     [dispatch, ingredients]
   );  
 
-  const dataToIngredientPreview = (ingredientId, index) => {
-    const ingredient = ingredients.filter(ingr => ingr._id === ingredientId)[0];
+  const dataToIngredientPreview = (ingredientId: any, index: number) => {
+    const ingredient = ingredients.filter((ingr: { _id: string; }) => ingr._id === ingredientId)[0];
     const widthRegulator = ingredientsId.length > 6 ? ingredientsId.length * Math.floor(ingredientsId.length / 5) : 0;
     price += ingredient.price;
     return (
-      <div key={index} className={styles.ingredientPreview} style={{left: `${-(24 + widthRegulator)*index}px`, zIndex: `${100 - index}`}}>
+      <div key={index} className={styles.ingredientPreview} style={{left: `${-(24 + widthRegulator)*index}px`, zIndex: 100 - index}}>
         <img className={styles.ingredientImage} src={ingredient.image} alt={ingredient.name} />
       </div>
     )
@@ -61,7 +60,7 @@ function OrderIngredients({ingredientsId}) {
   )
 }
 
-function CardOrder({path, _id, ingredients, time, name, orders}) {
+const CardOrder: FunctionComponent<ICardOrder> = ({path, _id, ingredients, time, name, orders}) => {
   return (
     <Link to={{
       pathname: `${path}/${_id}`,
@@ -76,8 +75,8 @@ function CardOrder({path, _id, ingredients, time, name, orders}) {
   )
 }
 
-export default function OrderList({path, orders}) {
-  const dataToOrder = (order) => {
+const OrderList: FunctionComponent<IOrderList> = ({path, orders}) => {
+  const dataToOrder = (order: IOrder) => {
     return (
       <CardOrder 
         path={path} 
@@ -97,3 +96,5 @@ export default function OrderList({path, orders}) {
     </div>
   )
 }
+
+export default OrderList;

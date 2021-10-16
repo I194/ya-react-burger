@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { Link, Redirect, useLocation } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
-import styles from './Auth.module.css';
-import { addTokens, getUserData, GET_USER_DATA, updateAccToken } from '../../services/actions/user';
+import styles from './Register.module.css';
+import { addNewUser, getUserData, updateAccToken } from '../../services/actions/user';
 import { useDispatch, useSelector } from 'react-redux';
 
 
-function Auth() {
-
+function Register() {
   const dispatch = useDispatch();
-  const redirectState = useLocation().state;
+  
   const userData = useSelector(state => state.user);
 
   const isTokenExpired = () => {
@@ -27,29 +25,38 @@ function Auth() {
 
   const [passParams, setPassParams] = useState({type: 'password', icon: 'ShowIcon'})
 
+  const [valueName, setValueName] = useState('');
   const [valueEmail, setValueEmail] = useState('');
   const [valuePass, setValuePass] = useState('');
 
-  const handleIconClick = e => {
+  const handleIconClick = () => {
     setPassParams({
       type: passParams.type === 'password' ? 'text' : 'password',
       icon: passParams.icon === 'ShowIcon' ? 'HideIcon' : 'ShowIcon'
     })
   }
 
-  function handleSubmit(event) {
+  function handleSubmit(event: { preventDefault: () => void; }) {
     event.preventDefault();
-    dispatch(addTokens(valueEmail, valuePass));
+    dispatch(addNewUser(valueEmail, valuePass, valueName));
   }
   
-  if (userData.refreshToken || localStorage.refreshToken) return (<Redirect to={ redirectState ? redirectState.from : '/' } />)
-  
+  if (userData.refreshToken || localStorage.refreshToken) return (<Redirect to="/" />)
+
   return (
     <div className={`${styles.content}`}>
       <p className="text text_type_main-medium">
-        Вход
+        Регистрация
       </p>
       <form action='' onSubmit={handleSubmit} id='form'>
+        <div className='pt-6'>
+          <Input 
+            type={'text'} 
+            placeholder={'Имя'}
+            value={valueName}
+            onChange={e => setValueName(e.target.value)}
+          />
+        </div>
         <div className='pb-6 pt-6'>
           <Input
             type={'email'}
@@ -70,16 +77,13 @@ function Auth() {
         </div>
       </form>
       <Button type="primary" size="medium" form='form'>
-        Войти
+        Зарегистрироваться
       </Button>
       <p className="text text_type_main-small text_color_inactive pt-20">
-        Вы - новый пользователь? <Link to="./register">Зарегистрироваться</Link>
-      </p>
-      <p className="text text_type_main-small text_color_inactive pt-4">
-        Забыли пароль? <Link to="./forgot-password">Восстановить пароль</Link>
+        Уже зарегистрированы? <Link to="./login">Войти</Link>
       </p>
     </div>
   )
 }
 
-export default Auth;
+export default Register;

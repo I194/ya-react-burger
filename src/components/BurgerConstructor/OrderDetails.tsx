@@ -1,9 +1,7 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { CheckMarkIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerConstructor.module.css';
-import { getOrder, SET_SELECTED_INGREDIENTS, CHANGE_SELECTED_BUN } from '../../services/actions/shop';
 
 export default function OrderDetails() {
   

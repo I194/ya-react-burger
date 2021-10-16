@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import { Link, Redirect } from 'react-router-dom';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './ForgotPass.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUserData, GET_USER_DATA, sendResetPassCode, updateAccToken } from '../../services/actions/user';
+import { getUserData, sendResetPassCode, updateAccToken } from '../../services/actions/user';
 
 
-function ForgotPass() {
+const ForgotPass = () => {
 
   const dispatch = useDispatch();
   
@@ -26,7 +25,7 @@ function ForgotPass() {
     }
   }, [dispatch, userData])
 
-  function handleSubmit(event) {
+  function handleSubmit(event: { preventDefault: () => void; }) {
     event.preventDefault();
     dispatch(sendResetPassCode(valueEmail));
   }

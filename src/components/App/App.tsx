@@ -1,8 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import AppHeader from '../AppHeader/AppHeader';
-import { ConstructorPage, LoginPage, RegisterPage, ForgotPasswordPage, ResetPasswordPage, ProfilePage, IngredientPage, NotFound404, FeedPage } from '../../pages';
-import styles from './App.module.css';
+import { ConstructorPage, LoginPage, RegisterPage, ForgotPasswordPage, ResetPasswordPage, ProfilePage, NotFound404, FeedPage } from '../../pages';
 import { ProtectedRoute } from '../ProtectedRoute/ProtectedRoute';
 
 function App() {
@@ -32,9 +31,6 @@ function App() {
           <ProtectedRoute path='/profile/orders'>
             <ProfilePage />
           </ProtectedRoute>
-          {/* <Route path='/ingredients/:id' exact={true}>
-            <IngredientPage />
-          </Route> */}
           <Route path='/'>
             <ConstructorPage />
           </Route>

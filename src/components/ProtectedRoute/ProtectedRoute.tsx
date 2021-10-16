@@ -1,8 +1,7 @@
-import React from "react";
-import PropTypes from 'prop-types';
+import React, { FunctionComponent } from "react";
 import { Route, Redirect } from 'react-router-dom';
 
-export function ProtectedRoute({ children, ...rest }) {
+export const ProtectedRoute: FunctionComponent = ({ children, ...rest }) => {
 
   const isAuth = () => {
     // if (!localStorage.initTime) return false; // there is no token at all...
@@ -28,8 +27,3 @@ export function ProtectedRoute({ children, ...rest }) {
     />
   );
 } 
-
-ProtectedRoute.propTypes = {
-  rest: PropTypes.object,
-  children: PropTypes.element.isRequired
-}
