@@ -61,11 +61,11 @@ function OrderIngredients({ingredientsId}) {
   )
 }
 
-function CardOrder({path, _id, ingredients, time, name}) {
+function CardOrder({path, _id, ingredients, time, name, orders}) {
   return (
     <Link to={{
       pathname: `${path}/${_id}`,
-      state: {modal: true, _id: _id}
+      state: {modal: true, _id: _id, orders: orders}
     }}>
       <div className={styles.cardOrder}>
         <OrderIdTime _id={`#${_id}`} time={time}/>
@@ -77,7 +77,6 @@ function CardOrder({path, _id, ingredients, time, name}) {
 }
 
 export default function OrderList({path, orders}) {
-  console.log(orders, path);
   const dataToOrder = (order) => {
     return (
       <CardOrder 
@@ -86,6 +85,7 @@ export default function OrderList({path, orders}) {
         ingredients={order.ingredients}
         time={order.createdAt}
         name={order.name}
+        orders={orders}
         key={order._id}
       />
     )

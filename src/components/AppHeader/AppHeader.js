@@ -50,7 +50,7 @@ function AppHeader() {
           </Link>
           <NavItem 
             icon={<ProfileIcon />} 
-            exact={true}
+            // exact={true}
             left={'80vw'}
             linkTo={'/profile'}
           >

@@ -181,7 +181,7 @@ export default function BurgerConstructor(props) {
   ); 
 
   useEffect(() => {
-    dispatch(updateAccToken());
+    dispatch(updateAccToken(localStorage.refreshToken));
   }, [dispatch])
 
   const dataToIngredient = (ingredientId, index, position) => {

@@ -18,7 +18,8 @@ export const FeedPage = () => {
     location.state.modal = false;
     history.push(path);
   }
-
+  
+  const orders = location.state ? location.state.orders : [];
   return (
     <>
       <Switch location={isModal ? {pathname: path} : location}>
@@ -26,7 +27,7 @@ export const FeedPage = () => {
           <Feed path={path}/>
         </Route>
         <Route path={`${path}/:id`}>
-          <OrderPage />
+          <OrderPage orders={orders}/>
         </Route>
       </Switch>
       {
@@ -40,7 +41,7 @@ export const FeedPage = () => {
             onClose={handleCloseModal} 
             box={{w: '720px', h: '720px'}}
           >
-            <OrderDetails _id={location.state._id}/>
+            <OrderDetails _id={location.state._id} orders={orders}/>
           </Modal>
         </Route> 
         :

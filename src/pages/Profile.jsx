@@ -19,6 +19,7 @@ export const ProfilePage = () => {
     history.push(`${path}/orders`);
   }
   
+  const orders = location.state ? location.state.orders : [];
   return (
     <>
       <Switch location={isModal ? {pathname: path} : location}>
@@ -29,7 +30,7 @@ export const ProfilePage = () => {
           <Profile path={path}/>
         </Route>
         <Route path={`${path}/orders/:id`} exact>
-          <OrderPage />
+          <OrderPage orders={orders}/>
         </Route>
       </Switch>
       {
@@ -43,7 +44,7 @@ export const ProfilePage = () => {
             onClose={handleCloseModal} 
             box={{w: '720px', h: '720px'}}
           >
-            <OrderDetails />
+            <OrderDetails _id={location.state._id} orders={orders}/>
           </Modal>
         </Route> 
         :

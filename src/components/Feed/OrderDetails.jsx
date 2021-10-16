@@ -4,7 +4,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './Feed.module.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { getItems, getOrdersFeed } from '../../services/actions/shop';
+import { getItems, getOrdersFeed, WS_CONNECTION_START } from '../../services/actions/shop';
 
 function Price({children}) {
   return (
@@ -29,11 +29,12 @@ function IngredientRow({name, count, price, image}) {
   )
 }
 
-function OrderDetails({_id}) {
+function OrderDetails({_id, orders}) {
 
   const dispatch = useDispatch();
 
-  const orders = useSelector(state => state.shop.orders);
+  const allOrders = useSelector(state => state.shop.orders);
+  if (!orders) orders = allOrders;
   const ingredients = useSelector(state => state.shop.ingredients);
   
   useEffect(() => {
@@ -51,6 +52,8 @@ function OrderDetails({_id}) {
   if (!orders.length || !ingredients.length || !_id) return null;
 
   const order = orders.filter(ord => ord._id === _id)[0];
+
+  // debugger;
   
   const nameSize = order.name.length > 84 ? 'default' : 'medium';
   const status = order.status === 'done' ? 'готов' : 'не готов';
