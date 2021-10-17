@@ -2,9 +2,10 @@ import React, { FunctionComponent, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './Feed.module.css';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useSelector } from '../../services/types/hooks';
 import { getItems } from '../../services/actions/shop';
-import { ICardOrder, IOrder, IOrderDetails, IOrderIdTime, IOrderIngredients, IOrderList } from '../../services/types/components';
+import { ICardOrder, IOrder, IOrderIdTime, IOrderIngredients, IOrderList } from '../../services/types/components';
 
 const Price: FunctionComponent = ({children}) => {
   return (

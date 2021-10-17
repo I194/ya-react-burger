@@ -1,5 +1,4 @@
 import React, { FunctionComponent } from 'react';
-import PropTypes from 'prop-types';
 import styles from './BurgerIngredients.module.css';
 import { IIllustration } from '../../services/types/components';
 

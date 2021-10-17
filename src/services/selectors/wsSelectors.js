@@ -1,1 +1,0 @@
-export const getOrders = store => store.shop.messages || [];

@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './ResetPass.module.css';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { getUserData, setNewPass, updateAccToken } from '../../services/actions/user';
-
+import { useSelector } from '../../services/types/hooks';
 
 function ResetPass() {
 
@@ -24,7 +24,7 @@ function ResetPass() {
     }
   }, [dispatch, userData])
 
-  const [passParams, setPassParams] = useState({type: 'password', icon: 'ShowIcon'})
+  const [passParams, setPassParams] = useState<{type: 'text' | 'password', icon: 'ShowIcon' | 'HideIcon'}>({type: 'password', icon: 'ShowIcon'})
   const [valuePass, setValuePass] = useState('');
   const [valueCode, setValueCode] = useState('');
 
@@ -67,10 +67,12 @@ function ResetPass() {
             onChange={e => setValueCode(e.target.value)}
           />
         </div>
+        <div className={styles.innerContent}>
+          <Button type="primary" size="medium"> 
+            Войти
+          </Button>
+        </div>
       </form>
-      <Button type="primary" size="medium" form='form'>
-        Сохранить
-      </Button>
       <p className="text text_type_main-small text_color_inactive pt-20">
         Вспомнили пароль? <Link to="/login">Войти</Link>
       </p>

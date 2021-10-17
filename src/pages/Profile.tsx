@@ -1,13 +1,14 @@
 import React from "react";
-import { Route, Switch, useHistory, useRouteMatch, useLocation, useParams } from 'react-router-dom';
-import Feed from "../components/Feed/Feed";
+import { Route, Switch, useHistory, useRouteMatch, useLocation } from 'react-router-dom';
+import Profile from "../components/Profile/Profile";
 import OrderDetails from "../components/Feed/OrderDetails";
 import Modal from "../components/Modal/Modal";
 import { OrderPage } from ".";
+import { ILocationState } from "../services/types/components";
 
-export const FeedPage = () => {
+export const ProfilePage = () => {
   const { path } = useRouteMatch();
-  const location = useLocation();
+  const location: any = useLocation<ILocationState>();
   const history = useHistory();
 
   const isModal = !!(
@@ -16,7 +17,7 @@ export const FeedPage = () => {
 
   const handleCloseModal = () => {
     location.state.modal = false;
-    history.push(path);
+    history.push(`${path}/orders`);
   }
   
   const orders = location.state ? location.state.orders : [];
@@ -24,9 +25,12 @@ export const FeedPage = () => {
     <>
       <Switch location={isModal ? {pathname: path} : location}>
         <Route path={`${path}`} exact>
-          <Feed path={path}/>
+          <Profile path={path}/>
         </Route>
-        <Route path={`${path}/:id`}>
+        <Route path={`${path}/orders`} exact>
+          <Profile path={path}/>
+        </Route>
+        <Route path={`${path}/orders/:id`} exact>
           <OrderPage orders={orders}/>
         </Route>
       </Switch>

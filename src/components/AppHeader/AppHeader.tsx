@@ -1,5 +1,4 @@
-import React, { FunctionComponent, useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { FunctionComponent } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import {ListIcon, Logo, BurgerIcon, ProfileIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './AppHeader.module.css';

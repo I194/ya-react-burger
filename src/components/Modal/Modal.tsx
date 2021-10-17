@@ -21,8 +21,8 @@ const ModalBody: FunctionComponent = ({children}) => {
     </div>
   )
 }
-
-const Modal: FunctionComponent<IModal> = ({onClose, isVisible, box, header, children}) => {
+ 
+const Modal: FunctionComponent<IModal> = ({onClose, isVisible, box, header, headerClass, children}) => {
 
   const handleKeyPress = (event: { code: string; }) => {
     if (event.code === 'Escape'){
@@ -31,7 +31,7 @@ const Modal: FunctionComponent<IModal> = ({onClose, isVisible, box, header, chil
   }
 
   useEffect(() => {
-    if (isVisible) document.getElementById('modal-container')!.focus();
+    if (isVisible) document.getElementById('modal-container')?.focus();
   }, [isVisible])
 
   return createPortal(
@@ -52,7 +52,7 @@ const Modal: FunctionComponent<IModal> = ({onClose, isVisible, box, header, chil
                 }
               }
             >
-              <ModalHeader onClick={onClose}>{header}</ModalHeader>
+              <ModalHeader onClick={onClose} headerClass={headerClass}>{header}</ModalHeader>
               <ModalBody>{children}</ModalBody>
             </div>
           </div>

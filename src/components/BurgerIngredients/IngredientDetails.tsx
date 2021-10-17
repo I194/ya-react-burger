@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { useSelector } from '../../services/types/hooks';
 import styles from './BurgerIngredients.module.css';
 import Illustration from './Illustration';
 import Name from './Name';

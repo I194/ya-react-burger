@@ -1,12 +1,12 @@
-// socketMiddleware.js
+import { Dispatch } from "redux";
 
-export const socketMiddleware = (wsUrl) => {
-  return store => {
-    let socket = null;
+export const socketMiddleware = () => {
+  return (store: {dispatch: Dispatch}) => {
+    let socket: WebSocket | null = null;
 
-    return next => action => {
-      const { dispatch, getState } = store;
-      const { type, payload } = action;
+    return (next: (arg0: any) => void) => (action: { type: any; payload: any; wsUrl: string | URL }) => {
+      const { dispatch } = store;
+      const { type, payload, wsUrl } = action;
  
       if (type === 'WS_CONNECTION_START') {
         socket = new WebSocket(wsUrl);

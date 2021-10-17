@@ -1,10 +1,11 @@
 import React, { useMemo, useState, useEffect, FunctionComponent } from 'react';
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useSelector } from '../../services/types/hooks';
 import {Tab} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerIngredients.module.css';
 import Ingredient from './Ingredient';
-import { getItems, SET_INGREDIENT_MODAL} from '../../services/actions/shop.js';
+import { getItems, SET_INGREDIENT_MODAL} from '../../services/actions/shop';
 import { ICol, IHeadline } from '../../services/types/components';
  
 const Headline: FunctionComponent<IHeadline> = ({id, children}) => {

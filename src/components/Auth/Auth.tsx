@@ -3,14 +3,16 @@ import { Link, Redirect, useLocation } from 'react-router-dom';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './Auth.module.css';
 import { addTokens, getUserData, updateAccToken } from '../../services/actions/user';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useSelector } from '../../services/types/hooks';
+import { IUserData } from '../../services/types/components';
 
 
 function Auth() {
 
   const dispatch = useDispatch();
   const redirectState = useLocation<{from: string}>().state;
-  const userData = useSelector(state => state.user);
+  const userData: IUserData = useSelector(state => state.user);
 
   const isTokenExpired = () => {
     if (!localStorage.initTime) return true; // there is no token at all...
@@ -24,7 +26,7 @@ function Auth() {
     }
   }, [dispatch, userData])
 
-  const [passParams, setPassParams] = useState({type: 'password', icon: 'ShowIcon'})
+  const [passParams, setPassParams] = useState<{type: 'text' | 'password', icon: 'ShowIcon' | 'HideIcon'}>({type: 'password', icon: 'ShowIcon'})
 
   const [valueEmail, setValueEmail] = useState('');
   const [valuePass, setValuePass] = useState('');
@@ -36,7 +38,7 @@ function Auth() {
     })
   }
 
-  function handleSubmit(event: React.ChangeEvent<HTMLInputElement>) {
+  function handleSubmit(event: { preventDefault: () => void; }) {
     event.preventDefault();
     dispatch(addTokens(valueEmail, valuePass));
   }
@@ -48,7 +50,7 @@ function Auth() {
       <p className="text text_type_main-medium">
         Вход
       </p>
-      <form action='' onSubmit={handleSubmit} id='form'>
+      <form action='' onSubmit={handleSubmit}>
         <div className='pb-6 pt-6'>
           <Input
             type={'email'}
@@ -67,10 +69,12 @@ function Auth() {
             onChange={e => setValuePass(e.target.value)}
           />
         </div>
+        <div className={styles.innerContent}>
+          <Button type="primary" size="medium"> 
+            Войти
+          </Button>
+        </div>
       </form>
-      <Button type="primary" size="medium" onsubmit={handleSubmit}>
-        Войти
-      </Button>
       <p className="text text_type_main-small text_color_inactive pt-20">
         Вы - новый пользователь? <Link to="./register">Зарегистрироваться</Link>
       </p>

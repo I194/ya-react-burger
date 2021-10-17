@@ -1,3 +1,4 @@
+import { Reducer } from 'redux';
 import {
 
   GET_INGREDIENTS_FAILED,
@@ -29,8 +30,36 @@ import {
   WS_GET_MESSAGE,
 
 } from '../actions/shop';
+import { TShopActions } from '../types/shop';
 
-const initialState = {
+type TInitialState = {
+  ingredients: [],
+  ingredientsRequest: boolean,
+  ingredientsFailed: boolean,
+
+  selectedBun: {id: null, uid: number},
+  selectedIngredients: [],
+  selectedIngredientsRequest: boolean,
+  selectedIngredientsFailed: boolean,
+
+  currentIngredient: {},
+
+  order: null,
+  orderRequest: boolean,
+  orderFailed: boolean,
+
+  orders: [],
+  totalOrders: null,
+  todayOrders: null,
+  ordersRequest: boolean,
+  ordersFailed: boolean,
+
+  wsConnected: boolean,
+  messages: [],
+  error: string,
+}
+
+const initialState: TInitialState = {
 
   ingredients: [],
   ingredientsRequest: false,
@@ -59,7 +88,7 @@ const initialState = {
 
 }
 
-export const shopReducer = (state = initialState, action) => {
+export const shopReducer: Reducer = (state = initialState, action: TShopActions) => {
   switch (action.type) {
     // All ingredinets (ingredients in BurgerIngredients)
     case GET_INGREDIENTS_REQUEST: {
@@ -86,7 +115,7 @@ export const shopReducer = (state = initialState, action) => {
     case INCREASE_INGREDIENT_COUNT: {
       return {
         ...state,
-        ingredients: state.ingredients.map((ingredient) => {
+        ingredients: state.ingredients.map((ingredient: {_id: string, __v: number}) => {
           if (ingredient._id === action.id) {
             return {
               ...ingredient,
@@ -101,7 +130,7 @@ export const shopReducer = (state = initialState, action) => {
     case DECREASE_INGREDIENT_COUNT: {
       return {
         ...state,
-        ingredients: state.ingredients.map((ingredient) => {
+        ingredients: state.ingredients.map((ingredient: {_id: string, __v: number}) => {
           if (ingredient._id === action.id) {
             return {
               ...ingredient,
@@ -116,7 +145,7 @@ export const shopReducer = (state = initialState, action) => {
     case SET_INGREDIENT_COUNT: {
       return {
         ...state,
-        ingredients: state.ingredients.map((ingredient) => {
+        ingredients: state.ingredients.map((ingredient: {_id: string}) => {
           if (ingredient._id === action.id) {
             return {
               ...ingredient,
@@ -144,7 +173,7 @@ export const shopReducer = (state = initialState, action) => {
     case DELETE_SELECTED_INGREDIENT: {
       return {
         ...state,
-        selectedIngredients: state.selectedIngredients.filter(ingredient => ingredient.uid !== action.uid)
+        selectedIngredients: state.selectedIngredients.filter((ingredient: {uid: string}) => ingredient.uid !== action.uid)
       }
     }
     case SET_SELECTED_INGREDIENTS: {

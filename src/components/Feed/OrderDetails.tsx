@@ -1,7 +1,8 @@
 import React, { FunctionComponent, useEffect } from 'react';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './Feed.module.css';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useSelector } from '../../services/types/hooks';
 import { getItems, getOrdersFeed } from '../../services/actions/shop';
 import { IIngredientsRow, IOrderDetails } from '../../services/types/components';
 
@@ -43,19 +44,19 @@ const OrderDetails: FunctionComponent<IOrderDetails> = ({_id, orders}) => {
   );  
 
   useEffect(() => {
-    if (!orders.length) dispatch(getOrdersFeed());
+    if (!orders?.length) dispatch(getOrdersFeed());
     },
     [dispatch, orders]
   );    
 
-  if (!orders.length || !ingredients.length || !_id) return null;
+  if (!orders?.length || !ingredients.length || !_id) return null;
 
   const order = orders.filter(ord => ord._id === _id)[0];
 
-  // debugger;
+  const names = {'created': 'Выполнен', 'done': 'Выполнен', 'pending': 'Готовится'}
   
   const nameSize = order.name.length > 84 ? 'default' : 'medium';
-  const status = order.status === 'done' ? 'готов' : 'не готов';
+  const status = names[order.status];
   
   let price = 0;
 

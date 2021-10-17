@@ -1,7 +1,8 @@
 import React, { FunctionComponent } from "react";
 import { Route, Redirect } from 'react-router-dom';
+import { IProtectedRoute } from "../../services/types/components";
 
-export const ProtectedRoute: FunctionComponent = ({ children, ...rest }) => {
+export const ProtectedRoute: FunctionComponent<IProtectedRoute> = ({ children, ...rest }) => {
 
   const isAuth = () => {
     // if (!localStorage.initTime) return false; // there is no token at all...

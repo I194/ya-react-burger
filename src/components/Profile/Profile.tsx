@@ -1,14 +1,26 @@
 import React, { FunctionComponent, useCallback, useEffect, useState } from 'react';
-import { Link, Redirect, Route, Switch, useLocation } from 'react-router-dom';
+import { Link, NavLink, Redirect, Route, Switch, useLocation } from 'react-router-dom';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './Profile.module.css';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useSelector } from '../../services/types/hooks';
 import { CHANGE_USER_EMAIL, CHANGE_USER_NAME, CHANGE_USER_PASS, deleteUserData, getUserData, updateAccToken } from '../../services/actions/user';
 import { updateUser } from '../../utils/burger-api';
 import OrderList from '../Feed/OrderList';
 import { WS_CONNECTION_START } from '../../services/actions/shop';
-import { IProfile } from '../../services/types/components';
+import { INavItem, IProfile } from '../../services/types/components';
 
+const NavItem: FunctionComponent<INavItem> = ({linkTo, exact, onClick, children}) => {
+  return (
+    <NavLink to={linkTo} className={`${styles.navigationLink}`} activeClassName={styles.chosen} exact={exact} onClick={onClick}>
+      <div className={`${styles.menuItem}`}>
+        <p className={`text text_type_main-medium ${styles.name}`}>
+          {children}
+        </p>
+      </div>
+    </NavLink>
+  )
+}
 
 const Profile: FunctionComponent<IProfile> = ({path}) => {
 
@@ -22,7 +34,9 @@ const Profile: FunctionComponent<IProfile> = ({path}) => {
   
   const isTokenExpired = () => {
     if (!localStorage.initTime) return true; // there is no token at all...
-    return (Date.now() / 1000) > (Number(localStorage.initTime) + 1200);
+    const tokenDieTime = Number(localStorage.initTime) + 1200;
+    const currentTime = Date.now() / 1000;
+    return currentTime > tokenDieTime;
   }
 
   const getUser = useCallback(() => {
@@ -37,7 +51,9 @@ const Profile: FunctionComponent<IProfile> = ({path}) => {
   }, [userData, getUser])
 
   useEffect(() => {
-    dispatch({ type: WS_CONNECTION_START });
+    const token = localStorage.accessToken ? `?token=${localStorage.accessToken.split(' ')[1]}` : ''
+    const wsUrlUserOrders = `wss://norma.nomoreparties.space/orders${token}`;
+    dispatch({ type: WS_CONNECTION_START, wsUrl: wsUrlUserOrders });
   }, [dispatch]);  
 
   const [activePage, setActivePage] = useState('profile')
@@ -48,25 +64,17 @@ const Profile: FunctionComponent<IProfile> = ({path}) => {
   }
 
   if (!localStorage.refreshToken) return (<Redirect to='/login' />);
-
+  console.log(ordersData, messages)
   return (
     <div className={`${styles.content}`}>
       <div className={styles.leftBlock}>
         <div className={styles.menu}>
-          <Link to={'/profile'} onClick={() => {setActivePage('profile')}}>
-            <div className={`${styles.menuItem}`}>
-              <p className={`text text_type_main-medium ${activePage === 'profile' ? '' : 'text_color_inactive'}`}>
-                Профиль
-              </p>
-            </div>
-          </Link>
-          <Link to={'/profile/orders'} onClick={() => {setActivePage('orders')}}>
-            <div className={`${styles.menuItem}`}>
-              <p className={`text text_type_main-medium ${activePage === 'orders' ? '' : 'text_color_inactive'}`}>
-                История заказов
-              </p>
-            </div>
-          </Link>
+          <NavItem exact={true} linkTo={'/profile'}>
+            Профиль
+          </NavItem>
+          <NavItem exact={false} linkTo={'/profile/orders'}>
+            История заказов
+          </NavItem>
           <Link to={'#'} onClick={() => {setActivePage('exit'); dispatch(deleteUserData(localStorage.refreshToken));}}>
             <div className={`${styles.menuItem}`}>
               <p className={`text text_type_main-medium ${activePage === 'exit' ? '' : 'text_color_inactive'}`}>
@@ -121,13 +129,15 @@ const Profile: FunctionComponent<IProfile> = ({path}) => {
                   onChange={e => dispatch({type: CHANGE_USER_PASS, password: e.target.value})}
                 />
               </div>
+              <div className={styles.saveButton}>
+                <Button type="primary" size="medium"> 
+                  Сохранить
+                </Button>
+              </div>
             </form>
-            <div className={styles.saveButton}>
+            <div className={styles.cancelButton}>
               <Button type='secondary' size='medium' onClick={() => getUser()}>
                 Отмена
-              </Button>
-              <Button type='primary' size='medium' form='form'>
-                Сохранить
               </Button>
             </div>
           </Route>

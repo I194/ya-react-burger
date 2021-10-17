@@ -1,7 +1,10 @@
+import { MouseEventHandler } from "react";
+
 export interface INavItem {
-  icon: JSX.Element,
+  icon?: JSX.Element,
   exact: boolean,
-  linkTo: string
+  linkTo: string,
+  onClick?: MouseEventHandler<HTMLAnchorElement>
 }
 
 export interface IIngName {
@@ -42,7 +45,7 @@ export interface IIngredient {
   price: string | number,
   type?: string | undefined,
   count: number,
-  image: string | undefined,
+  image: string,
   image_large?: string,
   calories?: number,
   proteins?: number,
@@ -76,7 +79,8 @@ export interface IModal {
   onClose: () => void,
   header: string,
   box: {w: string, h: string},
-  isVisible: string
+  isVisible: boolean,
+  headerClass?: string
 }
 
 export interface ICompleted {
@@ -99,14 +103,14 @@ export interface IOrder {
   ingredients: [],
   number: number,
   name: string,
-  status: string,
+  status: 'done' | 'created' | 'pending',
   createdAt: string,
   _id: string
 }
 
 export interface IOrderDetails {
-  _id: string, 
-  orders: IOrder[]
+  _id?: string, 
+  orders?: IOrder[]
 }
 
 export interface IOrderIdTime {
@@ -141,5 +145,26 @@ export interface ILocationState {
     pathname: string
   },
   modal?: boolean,
+  orders?: IOrder[],
+  _id?: string
+}
+
+export interface IOrdersPage {
   orders?: IOrder[]
+}
+
+export interface IUser {
+  name?: string,
+  password?: string,
+  email?: string,
+}
+
+export interface IUserData {
+  user: IUser,
+  refreshToken?: string,
+  accessToken?: string
+}
+
+export interface IProtectedRoute {
+  path: string
 }

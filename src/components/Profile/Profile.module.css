@@ -44,10 +44,25 @@
   display: flex;
   align-items: flex-end;
   margin-left: auto;
+  justify-content: flex-end;
+}
+
+.cancelButton {
+  display: flex;
+  justify-content: center;
+  transform: translateY(-56px);
 }
 
 .menuItem {
   height: 64px;
   display: flex;
   align-items: center;
+}
+
+.navigationLink {
+  color: #8585AD;
+}   
+
+.chosen {
+  color: white;
 }

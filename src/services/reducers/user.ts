@@ -1,3 +1,4 @@
+import { Reducer } from "redux";
 import { 
   
   ADD_NEW_USER,
@@ -12,8 +13,22 @@ import {
   CHANGE_USER_PASS,
 
 } from "../actions/user";
+import { TUserActions } from "../types/user";
 
-const initialState = {
+type TInitialState = {
+
+  user: {
+    name: string,
+    email: string,
+    password: string
+  },
+  accessToken: null,
+  refreshToken: null,
+  resetPass: boolean,
+
+}
+
+const initialState: TInitialState = {
 
   user: {
     name: '',
@@ -26,7 +41,7 @@ const initialState = {
 
 }
 
-export const userReducer = (state = initialState, action) => {
+export const userReducer: Reducer = (state = initialState, action: TUserActions) => {
   switch (action.type) {
     case ADD_NEW_USER: {
       return {

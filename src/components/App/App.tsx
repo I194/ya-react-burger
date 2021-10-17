@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import AppHeader from '../AppHeader/AppHeader';
-import { ConstructorPage, LoginPage, RegisterPage, ForgotPasswordPage, ResetPasswordPage, ProfilePage, NotFound404, FeedPage } from '../../pages';
+import { ConstructorPage, LoginPage, RegisterPage, ForgotPasswordPage, ResetPasswordPage, ProfilePage, FeedPage } from '../../pages';
 import { ProtectedRoute } from '../ProtectedRoute/ProtectedRoute';
 
 function App() {

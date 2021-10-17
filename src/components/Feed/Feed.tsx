@@ -1,8 +1,9 @@
 import React, { FunctionComponent, useEffect } from 'react';
 import styles from './Feed.module.css';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useSelector } from '../../services/types/hooks';
 import OrderList from './OrderList';
-import { getOrdersFeed } from '../../services/actions/shop';
+import { getOrdersFeed, WS_CONNECTION_START } from '../../services/actions/shop';
 import { ICompleted, IFeed } from '../../services/types/components';
 
 const Completed: FunctionComponent<ICompleted> = ({text, number}) => {
@@ -22,15 +23,18 @@ const Feed: FunctionComponent<IFeed> = ({path}) => {
 
   const dispatch = useDispatch();
 
-  const orders = useSelector(state => state.shop.orders);
-  const totalOrders = useSelector(state => state.shop.totalOrders);
-  const todayOrders = useSelector(state => state.shop.todayOrders);
+  const messages = useSelector(state => state.shop.messages);
+  const ordersData = messages.length ? messages[0] : [];
 
-  useEffect(() => {
-    if (!orders.length) dispatch(getOrdersFeed());
-    },
-    [dispatch, orders]
-  );  
+  const { orders, total, totalToday } = ordersData;
+  console.log(messages, ordersData)
+
+  useEffect(() => {  
+  const wsUrlAllOrders = `wss://norma.nomoreparties.space/orders/all`;
+    dispatch({ type: WS_CONNECTION_START, wsUrl: wsUrlAllOrders });
+  }, [dispatch]);  
+
+  if (!orders?.length) return null;
 
   const doneOrders = orders.filter((order: { status: string; }) => order.status === 'done');
   const inProgressOrders = orders.filter((order: { status: string; }) => order.status !== 'done');
@@ -68,8 +72,8 @@ const Feed: FunctionComponent<IFeed> = ({path}) => {
             </div>
           </div>
         </div>
-        <Completed text={'Выполнено за всё время:'} number={totalOrders}/>
-        <Completed text={'Выполнено за сегодня:'} number={todayOrders}/>
+        <Completed text={'Выполнено за всё время:'} number={total}/>
+        <Completed text={'Выполнено за сегодня:'} number={totalToday}/>
       </div>
     </div>
   )

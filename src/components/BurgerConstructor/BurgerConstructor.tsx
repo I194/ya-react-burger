@@ -1,9 +1,9 @@
 import React, { FunctionComponent, useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import update from 'immutability-helper';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useSelector } from '../../services/types/hooks';
 import { useDrag, useDrop } from "react-dnd";
-import PropTypes from 'prop-types';
 import {ConstructorElement, CurrencyIcon, DragIcon, Button} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerConstructor.module.css';
 import Modal from '../Modal/Modal';
@@ -18,7 +18,7 @@ import {
   SET_INGREDIENT_COUNT,
   CHANGE_SELECTED_BUN,
   SET_SELECTED_INGREDIENTS,
-} from '../../services/actions/shop.js';
+} from '../../services/actions/shop';
 import { updateAccToken } from '../../services/actions/user';
 import { IConstructorList, IIngredient, IPrice } from '../../services/types/components';
 

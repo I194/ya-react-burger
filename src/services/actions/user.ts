@@ -1,4 +1,6 @@
 import { getAccToken, getUser, postAuth, postLogout, postNewPass, postNewUser, postResetPassCode } from "../../utils/burger-api";
+import { Dispatch } from "redux";
+import { TUserActions } from "../types/user";
 
 export const ADD_NEW_USER = 'ADD_NEW_USER';
 export const ADD_TOKENS = 'ADD_TOKENS'; 
@@ -11,14 +13,15 @@ export const CHANGE_USER_NAME = 'CHANGE_USER_NAME';
 export const CHANGE_USER_EMAIL = 'CHANGE_USER_EMAIL';
 export const CHANGE_USER_PASS = 'CHANGE_USER_PASS';
 
-export function addTokens(email, pass) {
-  return function(disptach) {
+export function addTokens(email: string, pass: string) {
+  return function(disptach: Dispatch<TUserActions>) {
     postAuth(email, pass)
       .then(res => {
         if (res && res.success) {
           localStorage.setItem('refreshToken', res.refreshToken);
           localStorage.setItem('accessToken', res.accessToken);
-          localStorage.setItem('initTime', Date.now() / 1000)
+          localStorage.setItem('initTime', String(Date.now() / 1000))
+          console.log(localStorage)
           disptach({type: ADD_TOKENS});
         }
       })
@@ -27,12 +30,14 @@ export function addTokens(email, pass) {
 }
 
 export function updateAccToken() {
-  return function(dispatch) {
+  return function(dispatch: Dispatch<TUserActions>) {
+    console.log(localStorage)
     getAccToken(localStorage.refreshToken)
       .then(res => {
+        console.log('hey')
         if (res && res.success) {
           localStorage.setItem('accessToken', res.accessToken);
-          localStorage.setItem('initTime', Date.now() / 1000)
+          localStorage.setItem('initTime', String(Date.now() / 1000))
           dispatch({type: UPDATE_ACC_TOKEN, accessToken: res.accessToken})
         }
       })
@@ -41,7 +46,7 @@ export function updateAccToken() {
 }
 
 export function getUserData() {
-  return function(dispatch) {
+  return function(dispatch: Dispatch<TUserActions>) {
     getUser()
       .then(res => {
         if (res && res.success) {
@@ -55,8 +60,8 @@ export function getUserData() {
   }
 }
 
-export function deleteUserData(token) {
-  return function(dispatch) {
+export function deleteUserData(token: string) {
+  return function(dispatch: Dispatch<TUserActions>) {
     postLogout(token)
       .then(res => {
         if (res && res.success) {
@@ -67,8 +72,8 @@ export function deleteUserData(token) {
   }
 }
 
-export function sendResetPassCode(email) {
-  return function(dispatch) {
+export function sendResetPassCode(email: string) {
+  return function(dispatch: Dispatch<TUserActions>) {
     postResetPassCode(email)
       .then(res => {
         if (res && res.success) {
@@ -79,8 +84,8 @@ export function sendResetPassCode(email) {
   }
 }
 
-export function setNewPass(pass, code) {
-  return function(dispatch) {
+export function setNewPass(pass: string, code: string) {
+  return function(dispatch: Dispatch<TUserActions>) {
     postNewPass(pass, code)
       .then(res => {
         if (res && res.success) {
@@ -91,8 +96,8 @@ export function setNewPass(pass, code) {
   }
 }
 
-export function addNewUser(email, pass, name) {
-  return function(dispatch) {
+export function addNewUser(email: string, pass: string, name: string) {
+  return function(dispatch: Dispatch<TUserActions>) {
     postNewUser(email, pass, name)
       .then(res => {
         if (res && res.success) {

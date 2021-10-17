@@ -3,8 +3,8 @@ import { Link, Redirect } from 'react-router-dom';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './Register.module.css';
 import { addNewUser, getUserData, updateAccToken } from '../../services/actions/user';
-import { useDispatch, useSelector } from 'react-redux';
-
+import { useDispatch } from 'react-redux';
+import { useSelector } from '../../services/types/hooks';
 
 function Register() {
   const dispatch = useDispatch();
@@ -23,7 +23,7 @@ function Register() {
     }
   }, [dispatch, userData])
 
-  const [passParams, setPassParams] = useState({type: 'password', icon: 'ShowIcon'})
+  const [passParams, setPassParams] = useState<{type: 'text' | 'password', icon: 'ShowIcon' | 'HideIcon'}>({type: 'password', icon: 'ShowIcon'})
 
   const [valueName, setValueName] = useState('');
   const [valueEmail, setValueEmail] = useState('');
@@ -75,10 +75,12 @@ function Register() {
             onChange={e => setValuePass(e.target.value)}
           />
         </div>
+        <div className={styles.innerContent}>
+          <Button type="primary" size="medium"> 
+            Войти
+          </Button>
+        </div>
       </form>
-      <Button type="primary" size="medium" form='form'>
-        Зарегистрироваться
-      </Button>
       <p className="text text_type_main-small text_color_inactive pt-20">
         Уже зарегистрированы? <Link to="./login">Войти</Link>
       </p>

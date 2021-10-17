@@ -1,13 +1,14 @@
 import React from "react";
 import { Route, Switch, useHistory, useRouteMatch, useLocation } from 'react-router-dom';
-import Profile from "../components/Profile/Profile";
+import Feed from "../components/Feed/Feed";
 import OrderDetails from "../components/Feed/OrderDetails";
 import Modal from "../components/Modal/Modal";
 import { OrderPage } from ".";
+import { ILocationState } from "../services/types/components";
 
-export const ProfilePage = () => {
+export const FeedPage = () => {
   const { path } = useRouteMatch();
-  const location = useLocation();
+  const location: any = useLocation<ILocationState>();
   const history = useHistory();
 
   const isModal = !!(
@@ -16,7 +17,7 @@ export const ProfilePage = () => {
 
   const handleCloseModal = () => {
     location.state.modal = false;
-    history.push(`${path}/orders`);
+    history.push(path);
   }
   
   const orders = location.state ? location.state.orders : [];
@@ -24,12 +25,9 @@ export const ProfilePage = () => {
     <>
       <Switch location={isModal ? {pathname: path} : location}>
         <Route path={`${path}`} exact>
-          <Profile path={path}/>
+          <Feed path={path}/>
         </Route>
-        <Route path={`${path}/orders`} exact>
-          <Profile path={path}/>
-        </Route>
-        <Route path={`${path}/orders/:id`} exact>
+        <Route path={`${path}/:id`}>
           <OrderPage orders={orders}/>
         </Route>
       </Switch>

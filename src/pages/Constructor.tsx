@@ -13,9 +13,11 @@ import Modal from "../components/Modal/Modal";
 import IngredientDetails from "../components/BurgerIngredients/IngredientDetails";
 import { ILocationState } from "../services/types/components";
 
+// interface ILocation extends ILocationState, Location {};
+
 export const ConstructorPage = () => {
   const { path } = useRouteMatch();
-  const location = useLocation<ILocationState>();
+  const location: any = useLocation<ILocationState>();
   const history = useHistory();
 
   const isModal = !!(
