@@ -1,8 +1,7 @@
 import React, { FunctionComponent, useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import update from 'immutability-helper';
-import { useDispatch } from 'react-redux';
-import { useSelector } from '../../services/types/hooks';
+import { useSelector, useDispatch } from '../../services/types/hooks';
 import { useDrag, useDrop } from "react-dnd";
 import {ConstructorElement, CurrencyIcon, DragIcon, Button} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerConstructor.module.css';
@@ -44,7 +43,7 @@ const ListElement: FunctionComponent<IConstructorList> = ({index, moveIngredient
 
   const [, drop] = useDrop({
     accept: 'selectedIngredient',
-    hover(item: any, monitor: any) {
+    hover(item: {index: string | number}, monitor) {
       if (!ref.current) {
         return;
       }
@@ -187,7 +186,7 @@ const BurgerConstructor = () => {
   const [{isHover}, dropTarget] = useDrop({
     accept: "ingredient",
     drop(ingredient: IIngredient) {
-      const ingredientFull = ingredients.filter((ingr: { _id: any; }) => ingr._id === ingredient.id)[0];
+      const ingredientFull = ingredients.filter((ingr: { _id: string; }) => ingr._id === ingredient.id)[0];
       if (ingredientFull.type === 'bun') {
         dispatch({
           type: SET_INGREDIENT_COUNT,

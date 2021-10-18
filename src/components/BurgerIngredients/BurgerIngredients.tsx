@@ -1,7 +1,6 @@
 import React, { useMemo, useState, useEffect, FunctionComponent } from 'react';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { useSelector } from '../../services/types/hooks';
+import { useSelector, useDispatch } from '../../services/types/hooks';
 import {Tab} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerIngredients.module.css';
 import Ingredient from './Ingredient';

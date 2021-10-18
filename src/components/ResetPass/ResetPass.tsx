@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './ResetPass.module.css';
-import { useDispatch } from 'react-redux';
 import { getUserData, setNewPass, updateAccToken } from '../../services/actions/user';
-import { useSelector } from '../../services/types/hooks';
+import { useSelector, useDispatch } from '../../services/types/hooks';
 
 function ResetPass() {
 

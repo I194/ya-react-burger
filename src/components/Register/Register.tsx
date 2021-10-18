@@ -3,8 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './Register.module.css';
 import { addNewUser, getUserData, updateAccToken } from '../../services/actions/user';
-import { useDispatch } from 'react-redux';
-import { useSelector } from '../../services/types/hooks';
+import { useSelector, useDispatch } from '../../services/types/hooks';
 
 function Register() {
   const dispatch = useDispatch();

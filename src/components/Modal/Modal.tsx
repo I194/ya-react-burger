@@ -24,22 +24,28 @@ const ModalBody: FunctionComponent = ({children}) => {
  
 const Modal: FunctionComponent<IModal> = ({onClose, isVisible, box, header, headerClass, children}) => {
 
-  const handleKeyPress = (event: { code: string; }) => {
-    if (event.code === 'Escape'){
-      onClose();
-    }
-  }
-
   useEffect(() => {
     if (isVisible) document.getElementById('modal-container')?.focus();
   }, [isVisible])
+
+  useEffect(() => {
+    const closeByEscape = (e: { key: string; }) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    }
+
+    document.addEventListener('keydown', closeByEscape)
+    
+    return () => document.removeEventListener('keydown', closeByEscape)
+}, [onClose])
 
   return createPortal(
     ( 
       <> 
         {
           isVisible && 
-          <div onKeyDown={handleKeyPress} id='modal-container'> 
+          <div id='modal-container'> 
             <ModalOverlay onClick={onClose} />
             <div 
               className={`${styles.modal}`}

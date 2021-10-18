@@ -1,6 +1,6 @@
 const BURGER_API_URL = 'https://norma.nomoreparties.space/api';
 
-const checkReponse = (res) => {
+const checkReponse = (res: Response) => {
   return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
 };
 
@@ -12,7 +12,7 @@ export async function getIngredients() {
 
 }
 
-export async function postOrder(ingredientsId) {
+export async function postOrder(ingredientsId: string[]) {
 
   return fetch(`${BURGER_API_URL}/orders`, {
       method: "POST", 
@@ -52,7 +52,7 @@ export async function getUserOrders() {
 
 }
 
-export async function getAccToken(token) {
+export async function getAccToken(token: string) {
 
   return fetch(`${BURGER_API_URL}/auth/token`, {
     method: "POST", 
@@ -82,7 +82,7 @@ export async function getUser() {
 
 }
 
-export async function updateUser(userData) {
+export async function updateUser(userData: {name: string, email: string, password: string}) {
 
   return fetch(`${BURGER_API_URL}/auth/user`, {
     method: "PATCH", 
@@ -98,7 +98,7 @@ export async function updateUser(userData) {
   
 }
 
-export async function postAuth(email, pass) {
+export async function postAuth(email: string, pass: string) {
 
   return fetch(`${BURGER_API_URL}/auth/login`, {
     method: "POST", 
@@ -113,7 +113,7 @@ export async function postAuth(email, pass) {
 
 }
 
-export async function postLogout(token) {
+export async function postLogout(token: string) {
 
   return fetch(`${BURGER_API_URL}/auth/logout`, {
     method: "POST", 
@@ -128,7 +128,7 @@ export async function postLogout(token) {
 
 }
 
-export async function postResetPassCode(email) {
+export async function postResetPassCode(email: string) {
 
   return fetch(`${BURGER_API_URL}/password-reset`, {
     method: "POST", 
@@ -143,7 +143,7 @@ export async function postResetPassCode(email) {
 
 }
 
-export async function postNewPass(pass, token) {
+export async function postNewPass(pass: string, token: string) {
 
   return fetch(`${BURGER_API_URL}/password-reset/reset`, {
     method: "POST", 
@@ -163,7 +163,7 @@ export async function postNewPass(pass, token) {
 
 }
 
-export async function postNewUser(email, pass, name) {
+export async function postNewUser(email: string, pass: string, name: string) {
   return fetch(`${BURGER_API_URL}/auth/register`, {
     method: "POST", 
     headers: {

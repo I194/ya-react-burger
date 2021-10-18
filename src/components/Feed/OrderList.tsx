@@ -2,8 +2,7 @@ import React, { FunctionComponent, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './Feed.module.css';
-import { useDispatch } from 'react-redux';
-import { useSelector } from '../../services/types/hooks';
+import { useSelector, useDispatch } from '../../services/types/hooks';
 import { getItems } from '../../services/actions/shop';
 import { ICardOrder, IOrder, IOrderIdTime, IOrderIngredients, IOrderList } from '../../services/types/components';
 
@@ -29,8 +28,8 @@ const OrderIngredients: FunctionComponent<IOrderIngredients> = ({ingredientsId})
 
   const dispatch = useDispatch();
   const ingredients = useSelector(state => state.shop.ingredients);
-
-  let price = 0;
+  
+  let price: number = 0;
   
   useEffect(() => {
     if (!ingredients.length) dispatch(getItems());
@@ -38,9 +37,10 @@ const OrderIngredients: FunctionComponent<IOrderIngredients> = ({ingredientsId})
     [dispatch, ingredients]
   );  
 
-  const dataToIngredientPreview = (ingredientId: any, index: number) => {
+  const dataToIngredientPreview = (ingredientId: string, index: number) => {
     const ingredient = ingredients.filter((ingr: { _id: string; }) => ingr._id === ingredientId)[0];
     const widthRegulator = ingredientsId.length > 6 ? ingredientsId.length * Math.floor(ingredientsId.length / 5) : 0;
+    if (!ingredient) return null;
     price += ingredient.price;
     return (
       <div key={index} className={styles.ingredientPreview} style={{left: `${-(24 + widthRegulator)*index}px`, zIndex: 100 - index}}>

@@ -1,8 +1,7 @@
 import React, { FunctionComponent, useEffect } from 'react';
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './Feed.module.css';
-import { useDispatch } from 'react-redux';
-import { useSelector } from '../../services/types/hooks';
+import { useSelector, useDispatch } from '../../services/types/hooks';
 import { getItems, getOrdersFeed } from '../../services/actions/shop';
 import { IIngredientsRow, IOrderDetails } from '../../services/types/components';
 

@@ -3,16 +3,13 @@ import { Link, Redirect, useLocation } from 'react-router-dom';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './Auth.module.css';
 import { addTokens, getUserData, updateAccToken } from '../../services/actions/user';
-import { useDispatch } from 'react-redux';
-import { useSelector } from '../../services/types/hooks';
-import { IUserData } from '../../services/types/components';
-
+import { useSelector, useDispatch } from '../../services/types/hooks';
 
 function Auth() {
 
   const dispatch = useDispatch();
   const redirectState = useLocation<{from: string}>().state;
-  const userData: IUserData = useSelector(state => state.user);
+  const userData = useSelector(state => state.user);
 
   const isTokenExpired = () => {
     if (!localStorage.initTime) return true; // there is no token at all...

@@ -2,12 +2,11 @@ import React, { FunctionComponent, useCallback, useEffect, useState } from 'reac
 import { Link, NavLink, Redirect, Route, Switch, useLocation } from 'react-router-dom';
 import { Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './Profile.module.css';
-import { useDispatch } from 'react-redux';
-import { useSelector } from '../../services/types/hooks';
+import { useSelector, useDispatch } from '../../services/types/hooks';
 import { CHANGE_USER_EMAIL, CHANGE_USER_NAME, CHANGE_USER_PASS, deleteUserData, getUserData, updateAccToken } from '../../services/actions/user';
 import { updateUser } from '../../utils/burger-api';
 import OrderList from '../Feed/OrderList';
-import { WS_CONNECTION_START } from '../../services/actions/shop';
+import { WS_CONNECTION_CLOSE, WS_CONNECTION_START } from '../../services/actions/shop';
 import { INavItem, IProfile } from '../../services/types/components';
 
 const NavItem: FunctionComponent<INavItem> = ({linkTo, exact, onClick, children}) => {
@@ -54,6 +53,9 @@ const Profile: FunctionComponent<IProfile> = ({path}) => {
     const token = localStorage.accessToken ? `?token=${localStorage.accessToken.split(' ')[1]}` : ''
     const wsUrlUserOrders = `wss://norma.nomoreparties.space/orders${token}`;
     dispatch({ type: WS_CONNECTION_START, wsUrl: wsUrlUserOrders });
+    return () => {
+      dispatch({ type: WS_CONNECTION_CLOSE });
+    }
   }, [dispatch]);  
 
   const [activePage, setActivePage] = useState('profile')

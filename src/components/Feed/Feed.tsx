@@ -1,9 +1,8 @@
 import React, { FunctionComponent, useEffect } from 'react';
 import styles from './Feed.module.css';
-import { useDispatch } from 'react-redux';
-import { useSelector } from '../../services/types/hooks';
+import { useSelector, useDispatch } from '../../services/types/hooks';
 import OrderList from './OrderList';
-import { getOrdersFeed, WS_CONNECTION_START } from '../../services/actions/shop';
+import { WS_CONNECTION_CLOSE, WS_CONNECTION_START } from '../../services/actions/shop';
 import { ICompleted, IFeed } from '../../services/types/components';
 
 const Completed: FunctionComponent<ICompleted> = ({text, number}) => {
@@ -27,11 +26,13 @@ const Feed: FunctionComponent<IFeed> = ({path}) => {
   const ordersData = messages.length ? messages[0] : [];
 
   const { orders, total, totalToday } = ordersData;
-  console.log(messages, ordersData)
 
   useEffect(() => {  
   const wsUrlAllOrders = `wss://norma.nomoreparties.space/orders/all`;
     dispatch({ type: WS_CONNECTION_START, wsUrl: wsUrlAllOrders });
+    return () => {
+      dispatch({ type: WS_CONNECTION_CLOSE });
+    }
   }, [dispatch]);  
 
   if (!orders?.length) return null;

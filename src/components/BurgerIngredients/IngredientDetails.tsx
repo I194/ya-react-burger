@@ -1,7 +1,6 @@
 import React, { FunctionComponent, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { useSelector } from '../../services/types/hooks';
+import { useSelector, useDispatch } from '../../services/types/hooks';
 import styles from './BurgerIngredients.module.css';
 import Illustration from './Illustration';
 import Name from './Name';
