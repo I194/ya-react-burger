@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect, FunctionComponent } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from '../../services/types/hooks';
 import {Tab} from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './BurgerIngredients.module.css';
@@ -32,6 +32,7 @@ const Col: FunctionComponent<ICol> = ({onClick, children}) => {
 const BurgerIngredients = () => {
 
   const dispatch = useDispatch();
+  const location = useLocation();
 
   // Ingredients 
   
@@ -52,7 +53,7 @@ const BurgerIngredients = () => {
       <Col key={ingredients._id} onClick={() => {handleOpenModal(ingredients)}}>
         <Link to={{
           pathname: `/ingredients/${ingredients._id}`,
-          state: {modal: true}
+          state: {modal: true, background: location}
         }}>
           <Ingredient 
             name={ingredients.name} 

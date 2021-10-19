@@ -16,10 +16,21 @@ const Price: FunctionComponent = ({children}) => {
 }
 
 const OrderIdTime: FunctionComponent<IOrderIdTime> = ({_id, time}) => {
+  const timeOptions: {} = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric'
+  };
+
+  const goodLookTime = new Date(time);
+
   return (
     <div className={styles.orderId}>
-      <p className="text text_type_main-small" style={{maxWidth: '258px'}}>{_id}</p>
-      <p className="text text_type_main-default text_color_inactive">{time}</p>
+      <p className="text text_type_digits-default" style={{maxWidth: '258px'}}>{_id}</p>
+      <p className="text text_type_main-default text_color_inactive">{goodLookTime.toLocaleString("ru", timeOptions)}</p>
     </div>
   )
 }
@@ -61,14 +72,14 @@ const OrderIngredients: FunctionComponent<IOrderIngredients> = ({ingredientsId})
   )
 }
 
-const CardOrder: FunctionComponent<ICardOrder> = ({path, _id, ingredients, time, name, orders}) => {
+const CardOrder: FunctionComponent<ICardOrder> = ({path, location, _id, number, ingredients, time, name, orders}) => {
   return (
     <Link to={{
       pathname: `${path}/${_id}`,
-      state: {modal: true, _id: _id, orders: orders}
+      state: {modal: true, background: location, _id: _id, number: number, orders: orders}
     }}>
       <div className={styles.cardOrder}>
-        <OrderIdTime _id={`#${_id}`} time={time}/>
+        <OrderIdTime _id={`#${number}`} time={time}/>
         <p className="text text_type_main-medium pr-6 pl-6">{name}</p>
         <OrderIngredients ingredientsId={ingredients}/>
       </div>
@@ -76,12 +87,14 @@ const CardOrder: FunctionComponent<ICardOrder> = ({path, _id, ingredients, time,
   )
 }
 
-const OrderList: FunctionComponent<IOrderList> = ({path, orders}) => {
+const OrderList: FunctionComponent<IOrderList> = ({path, orders, location}) => {
   const dataToOrder = (order: IOrder) => {
     return (
       <CardOrder 
-        path={path} 
+        path={path}
+        location={location} 
         _id={order._id}
+        number={order.number}
         ingredients={order.ingredients}
         time={order.createdAt}
         name={order.name}

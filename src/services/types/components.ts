@@ -124,7 +124,9 @@ export interface IOrderIngredients {
 
 export interface ICardOrder {
   path: string,
+  location: {},
   _id: string,
+  number: number,
   ingredients: [],
   time: string,
   name: string,
@@ -133,7 +135,8 @@ export interface ICardOrder {
 
 export interface IOrderList {
   path: string,
-  orders: []
+  orders: [],
+  location: {}
 }
 
 export interface IProfile {
@@ -146,11 +149,13 @@ export interface ILocationState {
   },
   modal?: boolean,
   orders?: IOrder[],
-  _id?: string
+  _id?: string,
+  background: any 
 }
 
 export interface IOrdersPage {
-  orders?: IOrder[]
+  orders?: IOrder[],
+  number?: number
 }
 
 export interface IUser {

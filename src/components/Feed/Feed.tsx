@@ -3,7 +3,8 @@ import styles from './Feed.module.css';
 import { useSelector, useDispatch } from '../../services/types/hooks';
 import OrderList from './OrderList';
 import { WS_CONNECTION_CLOSE, WS_CONNECTION_START } from '../../services/actions/shop';
-import { ICompleted, IFeed } from '../../services/types/components';
+import { ICompleted, IFeed, IOrder } from '../../services/types/components';
+import { useLocation } from 'react-router';
 
 const Completed: FunctionComponent<ICompleted> = ({text, number}) => {
   return (
@@ -21,6 +22,7 @@ const Completed: FunctionComponent<ICompleted> = ({text, number}) => {
 const Feed: FunctionComponent<IFeed> = ({path}) => {
 
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const messages = useSelector(state => state.shop.messages);
   const ordersData = messages.length ? messages[0] : [];
@@ -38,12 +40,12 @@ const Feed: FunctionComponent<IFeed> = ({path}) => {
   if (!orders?.length) return null;
 
   const doneOrders = orders.filter((order: { status: string; }) => order.status === 'done');
-  const inProgressOrders = orders.filter((order: { status: string; }) => order.status !== 'done');
+  const inProgressOrders = orders.filter((order: { status: string; }) => order.status === 'pending');
 
-  const dataToIdList = (order: { _id: string; }, index: number) => {
+  const dataToNumberList = (order: IOrder, index: number) => {
     return (
-      <p className="text text_type_main-small pb-2" key={index}>
-        {`#${order._id}`}
+      <p className="text text_type_digits-default pb-2 pr-1" key={index}>
+        {`${order.number}`}
       </p>
     )
   }
@@ -52,24 +54,24 @@ const Feed: FunctionComponent<IFeed> = ({path}) => {
     <div className={styles.content}>
       <div className={styles.leftBlock}>
         <p className={'text text_type_main-large pt-10 pb-5'}>Лента заказов</p>
-        <OrderList path={path} orders={orders}/>
+        <OrderList path={path} location={location} orders={orders}/>
       </div>
       <div className={styles.rightBlock}>
         <div className={styles.ordersBoard}>
-          <div className={`${styles.ordersList} mr-9`}>
+          <div className={`mr-10`}>
             <p className="text text_type_main-medium pb-6">
               Готовы:
             </p>
-            <div style={{color: '#00CCCC'}}>
-              {doneOrders.map(dataToIdList)}
+            <div className={`${styles.ordersList}`} style={{color: '#00CCCC'}}>
+              {doneOrders.map(dataToNumberList)}
             </div>
           </div>
-          <div className={styles.ordersList}>
+          <div>
             <p className="text text_type_main-medium pb-6">
               В работе:
             </p>
-            <div style={{color: '#00CCCC'}}>
-              {inProgressOrders.map(dataToIdList)}
+            <div className={styles.ordersList} style={{color: '#00CCCC'}}>
+              {inProgressOrders.map(dataToNumberList)}
             </div>
           </div>
         </div>

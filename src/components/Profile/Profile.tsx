@@ -144,7 +144,7 @@ const Profile: FunctionComponent<IProfile> = ({path}) => {
             </div>
           </Route>
           <Route path={`${path}/orders`}>
-            <OrderList path={`${path}/orders`} orders={ordersData.orders}/>
+            <OrderList path={`${path}/orders`} orders={ordersData.orders} location={location}/>
           </Route>
         </Switch>
       </div>

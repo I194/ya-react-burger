@@ -127,13 +127,21 @@
 .ordersList {
   display: flex;
   flex-direction: column;
-  width: 265px;
-  max-height: 280px;
-  overflow-y: auto;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 272px;
+  max-height: 320px;
+}
+
+.ordersList::after {
+  content: "";
+  height: 100%;
+  width: 100%;
+  flex-shrink: 1;
 }
 
 .completed {
-  padding-top: 60px;
+  padding-top: 30px;
 }
 
 .glow {

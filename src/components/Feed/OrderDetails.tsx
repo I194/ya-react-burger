@@ -72,6 +72,17 @@ const OrderDetails: FunctionComponent<IOrderDetails> = ({_id, orders}) => {
     )
   }
 
+  const timeOptions: {} = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric'
+  };
+  
+  const goodLookTime = new Date(order.createdAt);
+
   return (
     <div className={styles.orderContainer}>
       <div style={{textAlign: 'left', width: '640px'}}>
@@ -83,7 +94,7 @@ const OrderDetails: FunctionComponent<IOrderDetails> = ({_id, orders}) => {
         {Object.keys(uniqueIngredients).map(dataToIngredientRow)}
       </div>
       <div className={styles.orderTimePrice}>
-        <p className="text text_type_main-default text_color_inactive">{order.createdAt}</p>
+        <p className="text text_type_main-default text_color_inactive">{goodLookTime.toLocaleString("ru", timeOptions)}</p>
         <Price>{price}</Price>
       </div>
     </div>
