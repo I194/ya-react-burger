@@ -1,46 +1,35 @@
-# Getting Started with Create React App
+# Ya-React-Burger
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Учебный проект, выполенный в ходе курса по реакту от Яндекс.Практикума (5 поток). 
 
-## Available Scripts
+В проекте использовались:
+1. **React.js**
+2. **Redux.js**
+3. **TypeScript**
 
-In the project directory, you can run:
+Также используется **React DnD**, **React Router DOM** и **Redux Thunk**.
 
-### `yarn start`
+В проекте реализован функционал онлайн-бургерной:
+1. На главной странице (`/`) реализовано создание бургеров и оформление заказа;
+2. На странице ленты заказов (`/feed`) отображаются 50 последних заказов, а также имеется табло со статусами заказов;
+3. В личном кабинете (`/profile`) пользователь может изменить свою личную информацию и посмотреть историю всех своих заказов (`/profile/orders`).
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+:exclamation: Оформление заказов доступно только авторизованным пользователям 
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Список всех страниц проекта
+---
+1. `/` — главная страница, конструктор бургеров;
+2. `/feed` — страница всех заказов;
+3. `/login` — страница авторизации;
+4. `/register` — страница регистрации;
+5. `/forgot-password` — страница восстановления пароля, этап 1;
+6. `/reset-password` — страница восстановления пароля, этап 2;
+7. `/profile` — страница профиля пользователя;
+8. `/profile/orders` — страница с историей заказов пользователя;
+9. `/ingredients/:id` — страница с детальной информацией об ингредиенте;
+10. `/feed/:id` — страница с детальной информацией о заказе;
+11. `/profile/orders/:id` — страница с детальной информацией о заказе пользователя. 
 
-### `yarn test`
+Здесь `:id` — id ингредиента или заказа соответственно. Страницы с детальной информацией доступны либо при прямом переходе по ссылке, либо после обновления страницы при просмотре детальной информации в модальном окне (появляется при нажатии на ингредиент или заказ соответственно). 
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Проект создавался параллельно с изучением описанного выше стека технологий на протяжении двух месяцев с небольшими перерывами. 
