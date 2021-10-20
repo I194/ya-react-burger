@@ -63,29 +63,14 @@
 }
 
 .navigationLink {
-    /* Auto Layout */
-
-    /* position: absolute; */
     display: flex;
     flex-direction: row;
     align-items: center;
     padding: 16px 20px;
 
-    /* interface/modal-bg */
-
     background: #1C1C21;
     color: #8585AD;
-    /* interface/accent */
 
-    /* border: 1px dashed #4C4CFF;
-    box-sizing: border-box;
-    border-radius: 40px; */
-
-    /* Inside Auto Layout */
-
-    /* flex: none;
-    order: 1;
-    flex-grow: 0; */
     margin: 0px 4px;
 }   
 
