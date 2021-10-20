@@ -26,7 +26,7 @@ export const store = createStore(
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <Router>
+      <Router basename='/ya-react-burger'>
         <App />
       </Router>
     </Provider>
